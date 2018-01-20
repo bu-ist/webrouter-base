@@ -19,15 +19,15 @@ location ^~ /link {
 
 location = /robots.txt {
 <% if ENV['ROBOTS_TXT'] %>
-  proxy_pass http://content<%= ENV['ROBOTS_TXT'] %> ;
+  proxy_pass http://content-http<%= ENV['ROBOTS_TXT'] %> ;
 <% else %>
-  proxy_pass http://content/robots.txt ;
+  proxy_pass http://content-http/robots.txt ;
 <% end %>
   add_header X-Upstream "content" always;
 }
 
 location = / {
-  proxy_pass http://content/ ;
+  proxy_pass http://content-http/ ;
   add_header X-Upstream "content" always;
 }
 
@@ -80,13 +80,13 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
 
   # if map entry then proxy to that location
   if ($micro_backend) {
-    proxy_pass http://$micro_backend ;
+    proxy_pass $scheme://$micro_backend-$scheme ;
     add_header X-Backend $micro_backend always;
     add_header X-Upstream $micro_backend always;
   }
 
   if ($backend) {
-    proxy_pass http://$backend ;
+    proxy_pass $scheme://$backend-$scheme ;
     add_header X-Backend $backend always;
     add_header X-Upstream $backend always;
   }
@@ -95,13 +95,13 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   # we send all static files to the WordPress content servers
   #
   if ($request_uri ~ ^/+([a-zA-Z0-9_\-]+/)?files/ ) {
-    proxy_pass http://wpassets ;
+    proxy_pass $scheme://wpassets-$scheme ;
     add_header X-Upstream wpassets always;
   }
 
   # the rest of this is WordPress app servers
   add_header X-Upstream "wpapp" always;
-  proxy_pass http://wpapp ;
+  proxy_pass $scheme://wpapp-$scheme ;
 
 }
 
@@ -112,7 +112,7 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9\.\-]+) {
 
   # if map entry then proxy to that location
   if ($backend) {
-    proxy_pass http://$backend ;
+    proxy_pass $scheme://$backend-$scheme ;
     add_header X-Backend $backend always;
     add_header X-Upstream $backend always;
   }
@@ -121,12 +121,12 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9\.\-]+) {
   # we send all static files to the WordPress content servers
   #
   if ($request_uri ~ ^/+([a-zA-Z0-9_\-]+/)?files/ ) {
-    proxy_pass http://wpassets ;
+    proxy_pass $scheme://wpassets-$scheme ;
     add_header X-Upstream wpassets always;
   }
 
   # the rest of this is WordPress app servers
   add_header X-Upstream "wpapp" always;
-  proxy_pass http://wpapp ;
+  proxy_pass $scheme://wpapp-$scheme ;
 }
 

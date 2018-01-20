@@ -8,58 +8,69 @@ map $toplevel $backend {
 
 # ####
 # These are upstream so we don't need to adjust the configuration
+# We do need to have two entries by $scheme (http and https)
 #
-upstream legacy {
-<% elems = ENV['BACKEND_WEB_LEGACY'] || "ist-web-legacy-#{ENV['LANDSCAPE']}.bu.edu" %>
-<% elems.split(' ').each do |elem| %>
-  server <%= elem %> ; <% end %>
+upstream legacy-https {
+  server <%= ENV['BACKEND_WEB_LEGACY'] || "ist-web-legacy-#{ENV['LANDSCAPE']}.bu.edu" %>:443 ;
 }
 
-upstream media {
-<% elems = ENV['BACKEND_W3_MEDIA'] || "ist-w3-media-#{ENV['LANDSCAPE']}.bu.edu:481" %>
-<% elems.split(' ').each do |elem| %>
-  server <%= elem %> ; <% end %>
+upstream legacy-http {
+  server <%= ENV['BACKEND_WEB_LEGACY'] || "ist-web-legacy-#{ENV['LANDSCAPE']}.bu.edu" %>:80 ;
 }
 
-upstream content {
-<% elems = ENV['BACKEND_W3_CONTENT'] || "ist-w3-content-#{ENV['LANDSCAPE']}.bu.edu:381" %>
-<% elems.split(' ').each do |elem| %>
-  server <%= elem %> ; <% end %>
+upstream content-https {
+  server <%= ENV['BACKEND_W3_CONTENT'] || "ist-w3-content-#{ENV['LANDSCAPE']}.bu.edu" %>:443 ;
 }
 
-upstream wpassets {
-<% elems = ENV['BACKEND_WP_CONTENT'] || "ist-wp-assets-#{ENV['LANDSCAPE']}.bu.edu" %>
-<% elems.split(' ').each do |elem| %>
-  server <%= elem %> ; <% end %>
+upstream content-http {
+  server <%= ENV['BACKEND_W3_CONTENT'] || "ist-w3-content-#{ENV['LANDSCAPE']}.bu.edu" %>:80 ;
 }
 
-upstream wpapp {
-<% elems = ENV['BACKEND_WP_APP'] || "ist-wp-app-#{ENV['LANDSCAPE']}.bu.edu" %>
-<% elems.split(' ').each do |elem| %>
-  server <%= elem %> ; <% end %>
+upstream wpassets-http {
+  server <%= ENV['BACKEND_WP_CONTENT'] || "ist-wp-assets-#{ENV['LANDSCAPE']}.bu.edu" %>:80 ;
 }
 
-upstream dbin {
-<% elems = ENV['BACKEND_DBIN'] || "dbin-#{ENV['LANDSCAPE']}.bu.edu" %>
-<% elems.split(' ').each do |elem| %>
-  server <%= elem %> ; <% end %>
+upstream wpassets-https {
+  server <%= ENV['BACKEND_WP_CONTENT'] || "ist-wp-assets-#{ENV['LANDSCAPE']}.bu.edu" %>:443 ;
 }
 
-upstream phpbin {
-<% elems = ENV['BACKEND_PHPBIN'] || "phpbin-#{ENV['LANDSCAPE']}.bu.edu" %>
-<% elems.split(' ').each do |elem| %>
-  server <%= elem %> ; <% end %>
+upstream wpapp-https {
+  server <%= ENV['BACKEND_WP_APP'] || "ist-wp-app-#{ENV['LANDSCAPE']}.bu.edu" %>:443 ;
 }
 
-upstream degree-advice {
-<% elems = ENV['BACKEND_DEGREE_ADVICE'] || "degree-advice-#{ENV['LANDSCAPE']}.bu.edu" %>
-<% elems.split(' ').each do |elem| %>
-  server <%= elem %> ; <% end %>
+upstream wpapp-http {
+  server <%= ENV['BACKEND_WP_APP'] || "ist-wp-app-#{ENV['LANDSCAPE']}.bu.edu" %>:80 ;
 }
 
-upstream django {
-<% elems = ENV['BACKEND_DJANGO'] || "django-#{ENV['LANDSCAPE']}.bu.edu" %>
-<% elems.split(' ').each do |elem| %>
-  server <%= elem %> ; <% end %>
+upstream dbin-https {
+  server <%= ENV['BACKEND_DBIN'] || "dbin-#{ENV['LANDSCAPE']}.bu.edu" %>:443 ;
+}
+
+upstream dbin-http {
+  server <%= ENV['BACKEND_DBIN'] || "dbin-#{ENV['LANDSCAPE']}.bu.edu" %>:80 ;
+}
+
+upstream phpbin-https {
+  server <%= ENV['BACKEND_PHPBIN'] || "phpbin-#{ENV['LANDSCAPE']}.bu.edu" %>:443 ;
+}
+
+upstream phpbin-http {
+  server <%= ENV['BACKEND_PHPBIN'] || "phpbin-#{ENV['LANDSCAPE']}.bu.edu" %>:80 ;
+}
+
+upstream degree-advice-https {
+  server <%= ENV['BACKEND_DEGREE_ADVICE'] || "degree-advice-#{ENV['LANDSCAPE']}.bu.edu" %>:443 ;
+}
+
+upstream degree-advice-http {
+  server <%= ENV['BACKEND_DEGREE_ADVICE'] || "degree-advice-#{ENV['LANDSCAPE']}.bu.edu" %>:80 ;
+}
+
+upstream django-https {
+  server <%= ENV['BACKEND_DJANGO'] || "django-#{ENV['LANDSCAPE']}.bu.edu" %>:443 ;
+}
+
+upstream django-http {
+  server <%= ENV['BACKEND_DJANGO'] || "django-#{ENV['LANDSCAPE']}.bu.edu" %>:80 ;
 }
 
