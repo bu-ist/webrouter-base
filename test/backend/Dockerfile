@@ -2,6 +2,7 @@ FROM docker.io/nginx
 
 RUN apt-get update && apt-get install openssl
 
+ADD nginx.conf /etc/nginx/nginx.conf
 ADD default.conf /etc/nginx/conf.d/default.conf
 ADD mock.conf /etc/nginx/mock.conf
 COPY html/ /usr/share/nginx/html/
@@ -10,8 +11,7 @@ ADD run-nginx.sh /usr/sbin/run-nginx.sh
 CMD /usr/sbin/run-nginx.sh
 
 #
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf \
-  && mkdir -p /etc/pki/nginx \
+RUN mkdir -p /etc/pki/nginx \
   && chmod 755 /usr/sbin/run-nginx.sh
 
 EXPOSE 80
