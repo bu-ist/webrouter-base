@@ -7,15 +7,18 @@ rewrite_log on;
 location ^~ /link/bin/ {
   add_header Cache-Control "no-cache, no-store" always ;
   add_header X-Upstream "uiscgi_app" always;
-  resolver <%= ENV['NAMESERVER'] %> ;
-  proxy_pass $scheme://<%= ENV['BACKEND_UISCGI_APP'] || "ist-uiscgi-app-#{ENV['LANDSCAPE']}.bu.edu"  %> ;
+  proxy_pass $scheme://uiscgi_app-$scheme ;
 }
+#  add_header X-Upstream "uiscgi_app" always;
+#  resolver <%= ENV['NAMESERVER'] %> ;
+#  proxy_pass $scheme://<%= ENV['BACKEND_UISCGI_APP'] || "ist-uiscgi-app-#{ENV['LANDSCAPE']}.bu.edu"  %> ;
+#}
 
-location ^~ /link {
-  add_header X-Upstream "uiscgi_content" always;
-  resolver <%= ENV['NAMESERVER'] %> ;
-  proxy_pass $scheme://<%= ENV['BACKEND_UISCGI_CONTENT'] || "ist-uiscgi-content-#{ENV['LANDSCAPE']}.bu.edu"  %> ;
-}
+#location ^~ /link {
+#  add_header X-Upstream "uiscgi_content" always;
+#  resolver <%= ENV['NAMESERVER'] %> ;
+#  proxy_pass $scheme://<%= ENV['BACKEND_UISCGI_CONTENT'] || "ist-uiscgi-content-#{ENV['LANDSCAPE']}.bu.edu"  %> ;
+#}
 
 location = /robots.txt {
 <% if ENV['ROBOTS_TXT'] %>

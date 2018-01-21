@@ -74,3 +74,21 @@ upstream django-http {
   server <%= ENV['BACKEND_DJANGO'] || "django-#{ENV['LANDSCAPE']}.bu.edu" %>:80 ;
 }
 
+upstream uiscgi_app-https {
+  #add_header Cache-Control "no-cache, no-store" always ;
+  server <%= ENV['BACKEND_UISCGI_APP'] || "ist-uiscgi-app-#{ENV['LANDSCAPE']}.bu.edu" %>:443 ;
+}
+
+upstream uiscgi_app-http {
+  #add_header Cache-Control "no-cache, no-store" always ;
+  server <%= ENV['BACKEND_UISCGI_APP'] || "ist-uiscgi-app-#{ENV['LANDSCAPE']}.bu.edu" %>:80 ;
+}
+
+upstream uiscgi_content-https {
+  server <%= ENV['BACKEND_UISCGI_CONTENT'] || "ist-uiscgi-content-#{ENV['LANDSCAPE']}.bu.edu" %>:443 ;
+}
+
+upstream uiscgi_content-http {
+  server <%= ENV['BACKEND_UISCGI_CONTENT'] || "ist-uiscgi-content-#{ENV['LANDSCAPE']}.bu.edu" %>:80 ;
+}
+

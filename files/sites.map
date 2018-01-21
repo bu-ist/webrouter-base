@@ -14,8 +14,8 @@ bufellow/db-admin django ;
 django apps ;
 
 # UISCGI/link entries
-#link/bin uiscgi_app ;
-#link uiscgi_content ;
+link/bin uiscgi_app ;
+link uiscgi_content ;
 
 #admissions wordpress
 # dbin
