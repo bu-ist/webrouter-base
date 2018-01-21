@@ -1,3 +1,9 @@
+# The vanity redirect map maps to a 
+#
+map $toplevel $vanity_redirect {
+  studentlink /link/bin/uiscgi_studentlink.pl/uismpl/?ModuleName=menu.pl&NewMenu=Home ;
+}
+
 map $microsite $micro_backend {
   include /etc/nginx/sites.map;
 }

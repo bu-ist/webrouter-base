@@ -34,10 +34,11 @@ location = / {
   add_header X-Upstream "content" always;
 }
 
-location ^~ /studentlink {
-  add_header X-Upstream 'redirect' always; 
-  return 302 /link/bin/uiscgi_studentlink.pl/uismpl/?ModuleName=menu.pl&NewMenu=Home ;
-}
+# right now we are doing these redirects in the content backend
+#location ^~ /studentlink {
+#  add_header X-Upstream 'redirect' always; 
+#  return 302 /link/bin/uiscgi_studentlink.pl/uismpl/?ModuleName=menu.pl&NewMenu=Home ;
+#}
 
 location ~^/server/(?P<toplevel>version)$ {
   add_header X-Upstream "version" always;
@@ -88,6 +89,12 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
     add_header X-Upstream $micro_backend always;
   }
 
+  # if vanity redirect then return redirect
+  if ($vanity_redirect) {
+    add_header X-Upstream "redirect" always;
+    return 302 $vanity_redirect ;
+  }
+
   if ($backend) {
     proxy_pass $scheme://$backend-$scheme ;
     add_header X-Backend $backend always;
@@ -112,6 +119,12 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9\.\-]+) {
   add_header X-URI $uri always;
   add_header X-Top-Level $toplevel always;
   add_header X-Backend $backend always;
+
+  # if vanity redirect then return redirect
+  if ($vanity_redirect) {
+    add_header X-Upstream "redirect" always;
+    return 302 $vanity_redirect ;
+  }
 
   # if map entry then proxy to that location
   if ($backend) {
