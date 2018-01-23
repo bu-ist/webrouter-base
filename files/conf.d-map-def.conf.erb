@@ -4,11 +4,7 @@ map $toplevel $vanity_redirect {
   studentlink /link/bin/uiscgi_studentlink.pl/uismpl/?ModuleName=menu.pl&NewMenu=Home ;
 }
 
-map $backend $top_hostname {
-  include /etc/nginx/hosts.map ;
-}
-
-map $micro_backend $micro_hostname {
+map $backend $backend_hostname {
   include /etc/nginx/hosts.map ;
 }
 
@@ -16,7 +12,8 @@ map $microsite $micro_backend {
   include /etc/nginx/sites.map;
 }
 
-map $toplevel $backend {
+map $toplevel $top_backend {
+  default wordpress ;
   include /etc/nginx/sites.map;
 }
 

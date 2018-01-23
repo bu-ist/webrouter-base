@@ -43,7 +43,7 @@ location = / {
 location ~^/server/(?P<toplevel>version)$ {
   add_header X-Upstream "version" always;
   add_header Content-Type text/plain always;
-  return 200 "hostname: $hostname\nsites: $backend\n";
+  return 200 "hostname: $hostname\nsites: $top_backend\n";
 }
 
 location ~^/server/hosts.map$ {
@@ -82,78 +82,81 @@ location = /server/healthcheck {
 # for the type of backend.  The default is WordPress if that fails.
 #
 location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9_\-]+)) {
-  add_header X-URI $uri always;
-  add_header X-Top-Level $toplevel always;
-  add_header X-Micro-Level $microsite always;
 
-  resolver <%= ENV['NAMESERVER'] %> ;
+  # The first set of variables are determining if there is a 
+  # match on top or micro - output should be type
+  #
+  set $backend $top_backend ;
 
-  # if map entry then proxy to that location
   if ($micro_backend) {
-    proxy_pass $scheme://$micro_hostname ;
-    #proxy_pass $scheme://$micro_backend-$scheme ;
-    add_header X-Backend $micro_backend always;
-    add_header X-Upstream $micro_backend always;
+    set $backend $micro_backend ;
   }
 
-  # if vanity redirect then return redirect
-  if ($vanity_redirect) {
+  add_header X-Lookup "input: (${toplevel}:${microsite}) backend=${backend}(${top_backend}:${micro_backend})" always ;
+  return 200 "boo ${backend} ${toplevel} ${top_backend}" ; 
+  
+  # Special case of WordPress we need to figure out if wpapp or wpassets
+  #
+  set $is_wpfile "${backend}:$request_uri" ;
+  if ($is_wpfile ~ ^wordpress:/+([a-zA-Z0-9_\-]+/)?files/ ) {
+    set $backend "wpassets" ;
+  }
+
+  #
+  # End results of above is a backend variable - next we determine 
+  # what to do
+  #
+  if ($backend = 'redirect') {
     add_header X-Upstream "redirect" always;
     return 302 $vanity_redirect ;
   }
 
-  if ($backend) {
-    proxy_pass $scheme://$top_hostname ;
-    #proxy_pass $scheme://$backend-$scheme ;
-    add_header X-Backend $backend always;
-    add_header X-Upstream $backend always;
-  }
+  add_header X-Backend $backend always ;
+  add_header X-Upstream $backend always ;
 
-  # otherwise default to WordPress
-  # we send all static files to the WordPress content servers
+  proxy_pass $scheme://$backend_hostname ;
+
   #
-  if ($request_uri ~ ^/+([a-zA-Z0-9_\-]+/)?files/ ) {
-    proxy_pass $scheme://wpassets-$scheme ;
-    add_header X-Upstream wpassets always;
-  }
-
-  # the rest of this is WordPress app servers
-  add_header X-Upstream "wpapp" always;
-  proxy_pass $scheme://wpapp-$scheme ;
-
+  resolver <%= ENV['NAMESERVER'] %> ;
 }
 
 location  ~^/+(?P<toplevel>[a-zA-Z0-9\.\-]+) {
-  add_header X-URI $uri always;
-  add_header X-Top-Level $toplevel always;
-  add_header X-Backend $backend always;
 
-  resolver <%= ENV['NAMESERVER'] %> ;
+  # The first set of variables are determining if there is a 
+  # match on top or micro - output should be type
+  #
+  #set $backend $top_backend ;
+  
+  add_header X-Lookup "input: (${toplevel}:) backend=${backend}(${top_backend}:)" always ;
+  return 200 "boo ${toplevel} ${top_backend}" ; 
+  }
 
-  # if vanity redirect then return redirect
-  if ($vanity_redirect) {
+location ~^/+foo/ {
+  # Special case of WordPress we need to figure out if wpapp or wpassets
+  #
+  set $is_wpfile "${backend}:$request_uri" ;
+  if ($is_wpfile ~ ^wordpress:/+([a-zA-Z0-9_\-]+/)?files/ ) {
+    set $backend "wpassets" ;
+  }
+
+  add_header X-WPfile "${backend}    ${is_wpfile}" always ;
+
+  #
+  # End results of above is a backend variable - next we determine 
+  # what to do
+  #
+  if ($backend = 'redirect') {
     add_header X-Upstream "redirect" always;
     return 302 $vanity_redirect ;
   }
 
-  # if map entry then proxy to that location
-  if ($backend) {
-    proxy_pass $scheme://$top_hostname ;
-    add_header X-Backend $backend always;
-    add_header X-Upstream $backend always;
-    add_header X-BackendHost $top_hostname always;
-  }
+  add_header X-Backend $backend always ;
+  add_header X-Upstream $backend always ;
 
-  # otherwise default to WordPress
-  # we send all static files to the WordPress content servers
+  proxy_pass $scheme://$backend_hostname ;
+
   #
-  if ($request_uri ~ ^/+([a-zA-Z0-9_\-]+/)?files/ ) {
-    proxy_pass $scheme://wpassets-$scheme ;
-    add_header X-Upstream wpassets always;
-  }
+  resolver <%= ENV['NAMESERVER'] %> ;
 
-  # the rest of this is WordPress app servers
-  add_header X-Upstream "wpapp" always;
-  proxy_pass $scheme://wpapp-$scheme ;
 }
 

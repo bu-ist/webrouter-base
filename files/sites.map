@@ -1,6 +1,10 @@
 # This version string is used to make certain we are on the latest version
 version 2017-04-12 ;
 
+davidking content ;
+htbin legacy ;
+studentlink redirect ; 
+
 # items from the www:phpmap.txt
 buniverse phpbin ;
 maps phpbin ;
