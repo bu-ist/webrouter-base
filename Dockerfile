@@ -42,6 +42,7 @@ ADD files/default.d-www.conf.erb /etc/erb/nginx/default.d/www.conf.erb
 # the default map configuration is for internal testing
 ADD files/sites.map /etc/nginx/sites.map
 ADD files/hosts.map.erb /etc/erb/nginx/hosts.map.erb
+ADD files/redirects.map.erb /etc/erb/nginx/redirects.map.erb
 ADD files/vars.sh /etc/nginx/vars.sh
 
 # for now this is our split and everything below this is for a different location

@@ -1,7 +1,7 @@
 # The vanity redirect map maps to a 
 #
 map $toplevel $vanity_redirect {
-  studentlink /link/bin/uiscgi_studentlink.pl/uismpl/?ModuleName=menu.pl&NewMenu=Home ;
+  include /etc/nginx/redirects.map ;
 }
 
 map $backend $backend_hostname {
@@ -18,7 +18,9 @@ map $toplevel $top_backend {
 }
 
 # ####
-# this map determines whether we need to add the cache-control header to all output from this backend
+# this map determines whether we need to add the cache-control header to all output 
+# from a particular backend.  This is not expected to change between landscapes so
+# we are not putting it in a separate map file.
 #
 map $backend $backend_cachecontrol {
   uiscgi_app "no-cache, no-store" ;
