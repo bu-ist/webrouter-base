@@ -1,3 +1,4 @@
+# from the syst landscape
 # This version string is used to make certain we are on the latest version
 version 2017-04-12 ;
 
@@ -7,6 +8,8 @@ htbin legacy ;
 buniverse phpbin ;
 maps phpbin ;
 bufellow/db-admin django ;
+
+studentlink redirect ;
 
 # DegreeAdvice needs to be added
 # we should make a third party table for http backend services (maybe)
