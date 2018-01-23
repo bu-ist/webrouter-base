@@ -5,9 +5,11 @@ rewrite_log on;
 # whenever possible.
 #
 location ^~ /link/bin/ {
+  set $backend "uiscgi_app" ;
+
   add_header Cache-Control "no-cache, no-store" always ;
   add_header X-Upstream "uiscgi_app" always;
-  proxy_pass $scheme://uiscgi_app-$scheme ;
+  proxy_pass $scheme://$backend_hostname ;
 }
 #  add_header X-Upstream "uiscgi_app" always;
 #  resolver <%= ENV['NAMESERVER'] %> ;
@@ -21,16 +23,20 @@ location ^~ /link/bin/ {
 #}
 
 location = /robots.txt {
+  set $backend "content" ;
+
 <% if ENV['ROBOTS_TXT'] %>
-  proxy_pass http://content-http<%= ENV['ROBOTS_TXT'] %> ;
+  proxy_pass $scheme://$backend_hostname<%= ENV['ROBOTS_TXT'] %> ;
 <% else %>
-  proxy_pass http://content-http/robots.txt ;
+  proxy_pass $scheme://$backend_hostname/robots.txt ;
 <% end %>
   add_header X-Upstream "content" always;
 }
 
 location = / {
-  proxy_pass http://content-http/ ;
+  set $backend "content" ;
+
+  proxy_pass $scheme://$backend_hostname ;
   add_header X-Upstream "content" always;
 }
 
@@ -93,8 +99,6 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   }
 
   add_header X-Lookup "input: (${toplevel}:${microsite}) backend=${backend}(${top_backend}:${micro_backend})" always ;
-  return 200 "boo ${backend} ${toplevel} ${top_backend}" ; 
-  
   # Special case of WordPress we need to figure out if wpapp or wpassets
   #
   set $is_wpfile "${backend}:$request_uri" ;
@@ -125,13 +129,10 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9\.\-]+) {
   # The first set of variables are determining if there is a 
   # match on top or micro - output should be type
   #
-  #set $backend $top_backend ;
+  set $backend $top_backend ;
   
   add_header X-Lookup "input: (${toplevel}:) backend=${backend}(${top_backend}:)" always ;
-  return 200 "boo ${toplevel} ${top_backend}" ; 
-  }
 
-location ~^/+foo/ {
   # Special case of WordPress we need to figure out if wpapp or wpassets
   #
   set $is_wpfile "${backend}:$request_uri" ;
