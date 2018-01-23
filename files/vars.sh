@@ -18,7 +18,8 @@ export BACKEND_DBIN=test-backend
 export BACKEND_DJANGO=test-backend
 export BACKEND_DEGREE_ADVICE=test-backend
 
-if /bin/true ; then
+# set the following to /bin/true if you want to do something other than the autotest
+if /bin/false ; then
   export BACKEND_REDIRECT=www-test.bu.edu
   export BACKEND_WEB_LEGACY=www-test.bu.edu
   export BACKEND_W3_CONTENT=www-test.bu.edu
