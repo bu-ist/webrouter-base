@@ -196,12 +196,12 @@ fi
 
 echo ""
 echo "### Test default routing to WordPress"
-test_url "default-wpapp-http-admissions" http://${CONNECT_TO}/admissions/ 200 wpapp
-test_url "default-wpapp-https-admissions" https://${CONNECT_TO}/admissions/ 200 wpapp
+test_url "default-wpapp-http-admissions" http://${CONNECT_TO}/admissions/ 200 wordpress
+test_url "default-wpapp-https-admissions" https://${CONNECT_TO}/admissions/ 200 wordpress
 #test_url --head --referer "http://www.bu.edu/admissions" http://localhost/admissions/files/2017/02/Conservation-Business-thumb.jpg 200 wp-assets
 test_url --head  "default-wpassets-http-admissions" http://${CONNECT_TO}/admissions/files/2012/09/footbar_visit.png 200 wpassets
 #test_url http://localhost/admissions/files/foo.jpg 200 wp-assets
-test_url "default-wpapp-http-admissions" http://${CONNECT_TO}/admissions/visit-us/schedule-your-visit/ 200 wpapp
+test_url "default-wpapp-http-admissions" http://${CONNECT_TO}/admissions/visit-us/schedule-your-visit/ 200 wordpress
 
 echo ""
 echo "### Test routing to UISCGI"
@@ -255,7 +255,7 @@ fi
 #test_url "server-http-version" "http://${CONNECT_TO}/server/version" 200 version 'hostname: '
 #test_url "server-http-cloudfrontips" "http://${CONNECT_TO}/server/cloudfront_ips" 200 cloudfront_ips 
 
-test_url "http-students" "http://${CONNECT_TO}/students/" 200 wpapp 'generated in'
+test_url "http-students" "http://${CONNECT_TO}/students/" 200 wordpress 'generated in'
 
 test_url "http-degree-advice-root" "http://${CONNECT_TO}/degree-advice/" 301 degree-advice "http://$HOST/degree-advice/IRISLink.cgi"
 test_url "http-degree-advice-cgi" "http://${CONNECT_TO}/degree-advice/IRISLink.cgi" 302 degree-advice "idp/profile/SAML2/Redirect/SSO"
