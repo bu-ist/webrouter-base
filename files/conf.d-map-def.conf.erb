@@ -17,3 +17,10 @@ map $toplevel $top_backend {
   include /etc/nginx/sites.map;
 }
 
+# ####
+# this map determines whether we need to add the cache-control header to all output from this backend
+#
+map $backend $backend_cachecontrol {
+  uiscgi_app "no-cache, no-store" ;
+}
+

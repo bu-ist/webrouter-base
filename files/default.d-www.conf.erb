@@ -4,13 +4,13 @@ rewrite_log on;
 # These paths are specified as locations because they don't need to be dynamic.  Use standard NGINX 
 # whenever possible.
 #
-location ^~ /link/bin/ {
-  set $backend "uiscgi_app" ;
-
-  add_header Cache-Control "no-cache, no-store" always ;
-  add_header X-Upstream "uiscgi_app" always;
-  proxy_pass $scheme://$backend_hostname ;
-}
+#location ^~ /link/bin/ {
+#  set $backend "uiscgi_app" ;
+#
+#  add_header Cache-Control "no-cache, no-store" always ;
+#  add_header X-Upstream "uiscgi_app" always;
+#  proxy_pass $scheme://$backend_hostname ;
+#}
 #  add_header X-Upstream "uiscgi_app" always;
 #  resolver <%= ENV['NAMESERVER'] %> ;
 #  proxy_pass $scheme://<%= ENV['BACKEND_UISCGI_APP'] || "ist-uiscgi-app-#{ENV['LANDSCAPE']}.bu.edu"  %> ;
@@ -31,6 +31,15 @@ location = /robots.txt {
   proxy_pass $scheme://$backend_hostname/robots.txt ;
 <% end %>
   add_header X-Upstream "content" always;
+
+  if ($backend_cachecontrol) {
+    add_header Cache-Control $backend_cachecontrol always ;
+
+    # NGINX weirdness: we need to readd the other headers as matching this prevents the others
+    add_header X-Backend $backend always ;
+    add_header X-Upstream $backend always ;
+  }
+
 }
 
 location = / {
@@ -38,33 +47,41 @@ location = / {
 
   proxy_pass $scheme://$backend_hostname ;
   add_header X-Upstream "content" always;
-}
 
-# right now we are doing these redirects in the content backend
-#location ^~ /studentlink {
-#  add_header X-Upstream 'redirect' always; 
-#  return 302 /link/bin/uiscgi_studentlink.pl/uismpl/?ModuleName=menu.pl&NewMenu=Home ;
-#}
+  if ($backend_cachecontrol) {
+    add_header Cache-Control $backend_cachecontrol always ;
+
+    # NGINX weirdness: we need to readd the other headers as matching this prevents the others
+    add_header X-Backend $backend always ;
+    add_header X-Upstream $backend always ;
+  }
+
+}
 
 location ~^/server/(?P<toplevel>version)$ {
   add_header X-Upstream "version" always;
   add_header Content-Type text/plain always;
+  add_header Cache-Control "no-cache, no-store" always ;
+
   return 200 "hostname: $hostname\nsites: $top_backend\n";
 }
 
 location ~^/server/hosts.map$ {
+  add_header Cache-Control "no-cache, no-store" always ;
   alias /etc/nginx/hosts.map ;
 }
 
 location ~^/server/source_ip$ {
   add_header X-Upstream "source_ip" always;
   add_header Content-Type text/plain always;
+  add_header Cache-Control "no-cache, no-store" always ;
   return 200 "remote_addr: $remote_addr\nreal-ip: $realip_remote_addr\nx-forwarded-for: $http_x_forwarded_for\n" ;
 }
 
 location ~^/server/cloudfront_ips$ {
   add_header X-Upstream "cloudfront_ips" always ;
   add_header Content-Type text/plain always;
+  add_header Cache-Control "no-cache, no-store" always ;
   alias /etc/nginx/cloudfront_ips.conf ;
 
   # this should be relay7 plus ad-admin VPN (but we need to deal with local docker - commented for now)
@@ -120,6 +137,14 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
 
   proxy_pass $scheme://$backend_hostname ;
 
+  if ($backend_cachecontrol) {
+    add_header Cache-Control $backend_cachecontrol always ;
+
+    # NGINX weirdness: we need to readd the other headers as matching this prevents the others
+    add_header X-Backend $backend always ;
+    add_header X-Upstream $backend always ;
+  }
+
   #
   resolver <%= ENV['NAMESERVER'] %> ;
 }
@@ -155,6 +180,14 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9\.\-]+) {
   add_header X-Upstream $backend always ;
 
   proxy_pass $scheme://$backend_hostname ;
+
+  if ($backend_cachecontrol) {
+    add_header Cache-Control $backend_cachecontrol always ;
+
+    # NGINX weirdness: we need to readd the other headers as matching this prevents the others
+    add_header X-Backend $backend always ;
+    add_header X-Upstream $backend always ;
+  }
 
   #
   resolver <%= ENV['NAMESERVER'] %> ;
