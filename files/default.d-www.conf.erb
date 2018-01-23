@@ -46,6 +46,10 @@ location ~^/server/(?P<toplevel>version)$ {
   return 200 "hostname: $hostname\nsites: $backend\n";
 }
 
+location ~^/server/hosts.map$ {
+  alias /etc/nginx/hosts.map ;
+}
+
 location ~^/server/source_ip$ {
   add_header X-Upstream "source_ip" always;
   add_header Content-Type text/plain always;
@@ -82,9 +86,12 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   add_header X-Top-Level $toplevel always;
   add_header X-Micro-Level $microsite always;
 
+  resolver <%= ENV['NAMESERVER'] %> ;
+
   # if map entry then proxy to that location
   if ($micro_backend) {
-    proxy_pass $scheme://$micro_backend-$scheme ;
+    proxy_pass $scheme://$micro_hostname ;
+    #proxy_pass $scheme://$micro_backend-$scheme ;
     add_header X-Backend $micro_backend always;
     add_header X-Upstream $micro_backend always;
   }
@@ -96,7 +103,8 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   }
 
   if ($backend) {
-    proxy_pass $scheme://$backend-$scheme ;
+    proxy_pass $scheme://$top_hostname ;
+    #proxy_pass $scheme://$backend-$scheme ;
     add_header X-Backend $backend always;
     add_header X-Upstream $backend always;
   }
@@ -120,6 +128,8 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9\.\-]+) {
   add_header X-Top-Level $toplevel always;
   add_header X-Backend $backend always;
 
+  resolver <%= ENV['NAMESERVER'] %> ;
+
   # if vanity redirect then return redirect
   if ($vanity_redirect) {
     add_header X-Upstream "redirect" always;
@@ -128,9 +138,10 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9\.\-]+) {
 
   # if map entry then proxy to that location
   if ($backend) {
-    proxy_pass $scheme://$backend-$scheme ;
+    proxy_pass $scheme://$top_hostname ;
     add_header X-Backend $backend always;
     add_header X-Upstream $backend always;
+    add_header X-BackendHost $top_hostname always;
   }
 
   # otherwise default to WordPress

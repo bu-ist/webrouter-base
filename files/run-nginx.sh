@@ -32,7 +32,8 @@ fi
 
 # this is where we would load the first map files
 # look through the common configuration files and run erb to 
-FILES="nginx.conf conf.d/map-def.conf conf.d/ssl.conf conf.d/default.conf default.d/www.conf"
+FILES="hosts.map nginx.conf conf.d/map-def.conf conf.d/ssl.conf conf.d/default.conf default.d/www.conf"
+#FILES="$FILES hosts.map"
 
 for file in $FILES ; do
   fullfile="/etc/nginx/$file"
