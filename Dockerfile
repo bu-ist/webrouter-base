@@ -35,7 +35,7 @@ CMD /usr/sbin/run-nginx.sh
 # landscapes (and keep variable substituting them on each invocation.
 #
 ADD files/nginx.conf.erb /etc/erb/nginx/nginx.conf.erb
-ADD files/conf.d-map-def.conf.erb /etc/erb/nginx/conf.d/map-def.conf.erb
+ADD files/conf.d-map-def.conf /etc/nginx/conf.d/map-def.conf
 ADD files/conf.d-ssl.conf.erb /etc/erb/nginx/conf.d/ssl.conf.erb
 ADD files/conf.d-default.conf.erb /etc/erb/nginx/conf.d/default.conf.erb
 ADD files/default.d-www.conf.erb /etc/erb/nginx/default.d/www.conf.erb
@@ -47,7 +47,8 @@ ADD files/vars.sh /etc/nginx/vars.sh
 # this copies over the entire maps tree
 ADD files/maps /etc/nginx/maps
 
-RUN /usr/sbin/bu-build-maps.sh
+# this is not being persistent for some reason - we will punt and generate the maps outside for now
+#RUN /usr/sbin/bu-build-maps.sh && ls -l /etc/nginx/maps
 
 # for now this is our split and everything below this is for a different location
 #
