@@ -1,24 +1,32 @@
-# The vanity redirect map maps to a 
+# The following map files are all generated from the maps/src area using the script x.
+# This enables us to support virtual hosts in the future without having to tweak the 
+# actual input map files.  It also allows sanity checking of map entries in the future.
+#
+# The vanity redirect map to an absolute path.  This does not include the rest of the command-line
+# This makes it useful for 
 #
 map $toplevel $vanity_redirect {
-  include /etc/nginx/redirects.map ;
-}
-
-map $backend $backend_hostname {
-  include /etc/nginx/hosts.map ;
+  include /etc/nginx/maps/redirects.map ;
 }
 
 map $microsite $micro_backend {
-  include /etc/nginx/sites.map;
+  include /etc/nginx/maps/sites.map;
 }
 
 map $toplevel $top_backend {
   default wordpress ;
-  include /etc/nginx/sites.map;
+  include /etc/nginx/maps/sites.map;
 }
 
 # ####
-# this map determines whether we need to add the cache-control header to all output 
+# This map determines the which hostname to use for each backend type.
+#
+map $backend $backend_hostname {
+  include /etc/nginx/hosts.map ;
+}
+
+# ####
+# This map determines whether we need to add the cache-control header to all output 
 # from a particular backend.  This is not expected to change between landscapes so
 # we are not putting it in a separate map file.
 #

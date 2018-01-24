@@ -11,9 +11,10 @@ RUN yum install -y nginx ruby && yum clean all
 
 ADD files/run-nginx.sh /usr/sbin/run-nginx.sh
 ADD files/get-cloudfront-ip.rb /usr/sbin/get-cloudfront-ip.rb
+ADD files/bu-build-maps.sh /usr/sbin/bu-build-maps.sh
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf \
-  && chmod 755 /usr/sbin/run-nginx.sh /usr/sbin/get-cloudfront-ip.rb \
+  && chmod 755 /usr/sbin/run-nginx.sh /usr/sbin/get-cloudfront-ip.rb /usr/sbin/bu-build-maps.sh \
   && mkdir -p /etc/erb/nginx/conf.d /etc/erb/nginx/default.d \
   && ln -sf /dev/stderr /var/log/nginx/error.log \
   && ln -sf /dev/stdout /var/log/nginx/access.log 
@@ -40,10 +41,13 @@ ADD files/conf.d-default.conf.erb /etc/erb/nginx/conf.d/default.conf.erb
 ADD files/default.d-www.conf.erb /etc/erb/nginx/default.d/www.conf.erb
 
 # the default map configuration is for internal testing
-ADD files/sites.map /etc/nginx/sites.map
 ADD files/hosts.map.erb /etc/erb/nginx/hosts.map.erb
-ADD files/redirects.map.erb /etc/erb/nginx/redirects.map.erb
 ADD files/vars.sh /etc/nginx/vars.sh
+
+# this copies over the entire maps tree
+ADD files/maps /etc/nginx/maps
+
+RUN /usr/sbin/bu-build-maps.sh
 
 # for now this is our split and everything below this is for a different location
 #
