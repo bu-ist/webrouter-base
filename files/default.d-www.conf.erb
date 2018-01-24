@@ -149,7 +149,7 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   resolver <%= ENV['NAMESERVER'] %> ;
 }
 
-location  ~^/+(?P<toplevel>[a-zA-Z0-9\.\-]+) {
+location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
 
   # The first set of variables are determining if there is a 
   # match on top or micro - output should be type
