@@ -4,23 +4,6 @@ rewrite_log on;
 # These paths are specified as locations because they don't need to be dynamic.  Use standard NGINX 
 # whenever possible.
 #
-#location ^~ /link/bin/ {
-#  set $backend "uiscgi_app" ;
-#
-#  add_header Cache-Control "no-cache, no-store" always ;
-#  add_header X-Upstream "uiscgi_app" always;
-#  proxy_pass $scheme://$backend_hostname ;
-#}
-#  add_header X-Upstream "uiscgi_app" always;
-#  resolver <%= ENV['NAMESERVER'] %> ;
-#  proxy_pass $scheme://<%= ENV['BACKEND_UISCGI_APP'] || "ist-uiscgi-app-#{ENV['LANDSCAPE']}.bu.edu"  %> ;
-#}
-
-#location ^~ /link {
-#  add_header X-Upstream "uiscgi_content" always;
-#  resolver <%= ENV['NAMESERVER'] %> ;
-#  proxy_pass $scheme://<%= ENV['BACKEND_UISCGI_CONTENT'] || "ist-uiscgi-content-#{ENV['LANDSCAPE']}.bu.edu"  %> ;
-#}
 
 location = /robots.txt {
   set $backend "content" ;
@@ -77,7 +60,7 @@ location ~^/server/maps/(?P<map>[a-zA-Z0-9\.]+) {
   allow 168.122.75.0/24 ;
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
-  allow 172.25.0.0/16 ;
+  allow 172.0.0.0/8 ;
 <% end %>
 
   deny all ;
@@ -94,7 +77,7 @@ location ~^/server/hosts.map$ {
   allow 168.122.75.0/24 ;
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
-  allow 172.25.0.0/16 ;
+  allow 172.0.0.0/8 ;
 <% end %>
 
   deny all ;
@@ -113,7 +96,7 @@ location ~^/server/source_ip$ {
   allow 168.122.75.0/24 ;
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
-  allow 172.25.0.0/16 ;
+  allow 172.0.0.0/8 ;
 <% end %>
 
   deny all ;
@@ -132,7 +115,7 @@ location ~^/server/cloudfront_ips$ {
   allow 168.122.75.0/24 ;
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
-  allow 172.25.0.0/16 ;
+  allow 172.0.0.0/8 ;
 <% end %>
 
   deny all ;
