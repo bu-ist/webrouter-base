@@ -11,10 +11,10 @@ RUN yum install -y nginx ruby && yum clean all
 
 ADD files/run-nginx.sh /usr/sbin/run-nginx.sh
 ADD files/get-cloudfront-ip.rb /usr/sbin/get-cloudfront-ip.rb
-ADD files/bu-build-maps.sh /usr/sbin/bu-build-maps.sh
+#ADD files/bu-build-maps.sh /usr/sbin/bu-build-maps.sh
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf \
-  && chmod 755 /usr/sbin/run-nginx.sh /usr/sbin/get-cloudfront-ip.rb /usr/sbin/bu-build-maps.sh \
+  && chmod 755 /usr/sbin/run-nginx.sh /usr/sbin/get-cloudfront-ip.rb \
   && mkdir -p /etc/erb/nginx/conf.d /etc/erb/nginx/default.d \
   && ln -sf /dev/stderr /var/log/nginx/error.log \
   && ln -sf /dev/stdout /var/log/nginx/access.log 
@@ -49,13 +49,4 @@ ADD files/maps /etc/nginx/maps
 
 # this is not being persistent for some reason - we will punt and generate the maps outside for now
 #RUN /usr/sbin/bu-build-maps.sh && ls -l /etc/nginx/maps
-
-# for now this is our split and everything below this is for a different location
-#
-# the final default landscape should be test
-#ARG landscape=syst
-
-# These files remains in the landscape specific CodePipeline area.
-#ADD landscape/${landscape}/sites.map /etc/nginx/sites.map
-#ADD landscape/${landscape}/vars.sh /etc/nginx/vars.sh
 

@@ -66,9 +66,38 @@ location ~^/server/(?P<toplevel>version)$ {
   return 200 "hostname: $hostname\nsites: $top_backend\n";
 }
 
+location ~^/server/maps/(?P<map>[a-zA-Z0-9\.]+) {
+  add_header Cache-Control "no-cache, no-store" always ;
+  alias "/etc/nginx/maps/$map" ;
+ 
+  # relay7
+  allow 128.197.229.78/32 ;
+  # ad-admin VPNs
+  allow 168.122.88.0/24 ;
+  allow 168.122.75.0/24 ;
+<% if ENV['ALLOW_DOCKER_NETS'] %>
+  # allow the private net used by docker compose
+  allow 172.25.0.0/16 ;
+<% end %>
+
+  deny all ;
+}
+
 location ~^/server/hosts.map$ {
   add_header Cache-Control "no-cache, no-store" always ;
   alias /etc/nginx/hosts.map ;
+ 
+  # relay7
+  allow 128.197.229.78/32 ;
+  # ad-admin VPNs
+  allow 168.122.88.0/24 ;
+  allow 168.122.75.0/24 ;
+<% if ENV['ALLOW_DOCKER_NETS'] %>
+  # allow the private net used by docker compose
+  allow 172.25.0.0/16 ;
+<% end %>
+
+  deny all ;
 }
 
 location ~^/server/source_ip$ {
@@ -76,6 +105,18 @@ location ~^/server/source_ip$ {
   add_header Content-Type text/plain always;
   add_header Cache-Control "no-cache, no-store" always ;
   return 200 "remote_addr: $remote_addr\nreal-ip: $realip_remote_addr\nx-forwarded-for: $http_x_forwarded_for\n" ;
+ 
+  # relay7
+  allow 128.197.229.78/32 ;
+  # ad-admin VPNs
+  allow 168.122.88.0/24 ;
+  allow 168.122.75.0/24 ;
+<% if ENV['ALLOW_DOCKER_NETS'] %>
+  # allow the private net used by docker compose
+  allow 172.25.0.0/16 ;
+<% end %>
+
+  deny all ;
 }
 
 location ~^/server/cloudfront_ips$ {
@@ -84,10 +125,17 @@ location ~^/server/cloudfront_ips$ {
   add_header Cache-Control "no-cache, no-store" always ;
   alias /etc/nginx/cloudfront_ips.conf ;
 
-  # this should be relay7 plus ad-admin VPN (but we need to deal with local docker - commented for now)
-  #allow 128.197.0.0/16;
-  #allow 168.122.0.0/16;
-  #deny all ;
+  # relay7
+  allow 128.197.229.78/32 ;
+  # ad-admin VPNs
+  allow 168.122.88.0/24 ;
+  allow 168.122.75.0/24 ;
+<% if ENV['ALLOW_DOCKER_NETS'] %>
+  # allow the private net used by docker compose
+  allow 172.25.0.0/16 ;
+<% end %>
+
+  deny all ;
 }
 
 # ####
