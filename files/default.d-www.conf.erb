@@ -53,11 +53,9 @@ location ~^/server/maps/(?P<map>[a-zA-Z0-9\.]+) {
   add_header Cache-Control "no-cache, no-store" always ;
   alias "/etc/nginx/maps/$map" ;
  
-  # relay7
-  allow 128.197.229.78/32 ;
-  # ad-admin VPNs
-  allow 168.122.88.0/24 ;
-  allow 168.122.75.0/24 ;
+  # only from some BU networks
+  allow 128.197.0.0/16 ;
+  allow 168.122.0.0/16 ;
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
@@ -70,11 +68,9 @@ location ~^/server/hosts.map$ {
   add_header Cache-Control "no-cache, no-store" always ;
   alias /etc/nginx/hosts.map ;
  
-  # relay7
-  allow 128.197.229.78/32 ;
-  # ad-admin VPNs
-  allow 168.122.88.0/24 ;
-  allow 168.122.75.0/24 ;
+  # only from some BU networks
+  allow 128.197.0.0/16 ;
+  allow 168.122.0.0/16 ;
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
@@ -89,11 +85,9 @@ location ~^/server/source_ip$ {
   add_header Cache-Control "no-cache, no-store" always ;
   return 200 "remote_addr: $remote_addr\nreal-ip: $realip_remote_addr\nx-forwarded-for: $http_x_forwarded_for\n" ;
  
-  # relay7
-  allow 128.197.229.78/32 ;
-  # ad-admin VPNs
-  allow 168.122.88.0/24 ;
-  allow 168.122.75.0/24 ;
+  # only from some BU networks
+  allow 128.197.0.0/16 ;
+  allow 168.122.0.0/16 ;
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
@@ -108,11 +102,9 @@ location ~^/server/cloudfront_ips$ {
   add_header Cache-Control "no-cache, no-store" always ;
   alias /etc/nginx/cloudfront_ips.conf ;
 
-  # relay7
-  allow 128.197.229.78/32 ;
-  # ad-admin VPNs
-  allow 168.122.88.0/24 ;
-  allow 168.122.75.0/24 ;
+  # only from some BU networks
+  allow 128.197.0.0/16 ;
+  allow 168.122.0.0/16 ;
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
