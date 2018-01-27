@@ -45,4 +45,4 @@ for file in $FILES ; do
 done
 
 echo "Starting nginx"
-exec /usr/sbin/nginx 
+exec /usr/sbin/nginx "$@"
