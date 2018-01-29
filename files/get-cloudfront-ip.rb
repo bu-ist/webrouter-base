@@ -18,6 +18,7 @@ end
 # At the end print our standard footer
 #
 print "\n# Set VPC subnet as trusted\nset_real_ip_from 10.0.0.0/8;\n"
+print "\n# Set dsmk POC system as trusted\nset_real_ip_from 128.197.229.139/32 ;\n"
 #print "\n# Set VPC subnet as trusted\nset_real_ip_from 0.0.0.0/0;\n"
 print "\n# Set the header we are looking at\nreal_ip_header X-Forwarded-For ;\n"
 print "\n# Ignore all trusted IPs\nreal_ip_recursive on ;\n"
