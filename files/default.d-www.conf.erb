@@ -50,6 +50,7 @@ location ~^/server/(?P<toplevel>version)$ {
 }
 
 location ~^/server/maps/(?P<map>[a-zA-Z0-9\.]+) {
+  add_header Content-Type text/plain always;
   add_header Cache-Control "no-cache, no-store" always ;
   alias "/etc/nginx/maps/$map" ;
  
@@ -65,6 +66,7 @@ location ~^/server/maps/(?P<map>[a-zA-Z0-9\.]+) {
 }
 
 location ~^/server/hosts.map$ {
+  add_header Content-Type text/plain always;
   add_header Cache-Control "no-cache, no-store" always ;
   alias /etc/nginx/hosts.map ;
  
