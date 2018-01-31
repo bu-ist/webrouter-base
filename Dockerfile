@@ -40,6 +40,8 @@ ADD files/conf.d-ssl.conf.erb /etc/erb/nginx/conf.d/ssl.conf.erb
 ADD files/conf.d-default.conf.erb /etc/erb/nginx/conf.d/default.conf.erb
 ADD files/default.d-www.conf.erb /etc/erb/nginx/default.d/www.conf.erb
 
+ADD files/html /usr/share/nginx/html/ 
+
 # the default map configuration is for internal testing
 ADD files/hosts.map.erb /etc/erb/nginx/hosts.map.erb
 ADD files/vars.sh /etc/nginx/vars.sh
