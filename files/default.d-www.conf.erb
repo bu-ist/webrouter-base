@@ -116,6 +116,34 @@ location ~^/server/cloudfront_ips$ {
 }
 
 # ####
+# the following test the routing lookup
+#
+location ~^/server/lookup/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9_\-]+)) {
+
+  # The first set of variables are determining if there is a 
+  # match on top or micro - output should be type
+  #
+  set $backend $top_backend ;
+
+  if ($micro_backend) {
+    set $backend $micro_backend ;
+  }
+
+  add_header Content-Type text/plain always;
+  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nhost: $host\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
+}
+
+location  ~^/+server/lookup/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
+  # The first set of variables are determining if there is a 
+  # match on top or micro - output should be type
+  #
+  set $backend $top_backend ;
+
+  add_header Content-Type text/plain always;
+  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nhost: $host\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: \nmicro_backend: ";
+}
+
+# ####
 # We don't want to log the healthcheck traffic
 #
 location = /server/healthcheck {
