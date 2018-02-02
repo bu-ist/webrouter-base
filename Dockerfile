@@ -1,6 +1,12 @@
-FROM amazonlinux:latest
+# This is tagged to a specific Amazon Linux release number.  Go to https://hub.docker.com/_/amazonlinux/
+# to see what tags they support.
+# 2018-02-02: right now we want to stay with the latest version 1 release (2 should work but is still betaish
+#
+FROM amazonlinux:1
 
-ENV PATCHDATE 20170712
+# 
+ADD BUILDDATE.DAT /etc/builddate-base.dat
+
 RUN yum -y update && yum clean all
 
 #RUN rpm -Uvh http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm

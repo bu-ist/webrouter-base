@@ -13,6 +13,11 @@ if [ -f /etc/nginx/vars.sh ]; then
   . /etc/nginx/vars.sh
 fi
 
+# get the builddate of the base image if it is available
+if [ -f /etc/builddate-base.dat ]; then
+  export BUILDDATE=`/bin/cat /etc/builddate-base.dat`
+fi
+
 # get a nameserver from the system for nginx resolver lines
 NAMESERVER=`/bin/grep ^nameserver /etc/resolv.conf | /bin/awk '{print $2}' | head -1 `
 export NAMESERVER

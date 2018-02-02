@@ -46,7 +46,7 @@ location ~^/server/(?P<toplevel>version)$ {
   add_header Content-Type text/plain always;
   add_header Cache-Control "no-cache, no-store" always ;
 
-  return 200 "hostname: $hostname\nsites: $top_backend\n";
+  return 200 "hostname: $hostname\nsites: $top_backend\nbase: <%= ENV['BUILDDATE'] %>";
 }
 
 location ~^/server/maps/(?P<map>[a-zA-Z0-9\.]+) {
