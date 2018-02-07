@@ -123,14 +123,18 @@ location ~^/server/lookup/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<seco
   # The first set of variables are determining if there is a 
   # match on top or micro - output should be type
   #
-  set $backend $top_backend ;
+  set $backend $host_backend ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+  }
 
   if ($micro_backend) {
     set $backend $micro_backend ;
   }
 
   add_header Content-Type text/plain always;
-  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nhost: $host\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
+  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
 }
 
 location  ~^/+server/lookup/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
