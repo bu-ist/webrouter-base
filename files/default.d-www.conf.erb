@@ -26,10 +26,27 @@ location = /robots.txt {
 }
 
 location = / {
-  set $backend "content" ;
+  set $toplevel "index.html" ;
+
+  set $backend $host_backend ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+  }
+
+  #
+  # End results of above is a backend variable - next we determine 
+  # what to do
+  #
+  if ($backend = 'redirect') {
+    add_header X-Upstream "redirect" always;
+    return 302 $vanity_redirect ;
+  }
+
+  add_header X-Backend $backend always ;
+  add_header X-Upstream $backend always ;
 
   proxy_pass $scheme://$backend_hostname ;
-  add_header X-Upstream "content" always;
 
   if ($backend_cachecontrol) {
     add_header Cache-Control $backend_cachecontrol always ;
@@ -39,6 +56,8 @@ location = / {
     add_header X-Upstream $backend always ;
   }
 
+  #
+  resolver <%= ENV['NAMESERVER'] %> ;
 }
 
 location ~^/server/(?P<toplevel>version)$ {
@@ -123,24 +142,48 @@ location ~^/server/lookup/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<seco
   # The first set of variables are determining if there is a 
   # match on top or micro - output should be type
   #
-  set $backend $top_backend ;
+  set $backend $host_backend ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+  }
 
   if ($micro_backend) {
     set $backend $micro_backend ;
   }
 
   add_header Content-Type text/plain always;
-  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nhost: $host\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
+  add_header X-Upstream "source_ip" always;
+  add_header Cache-Control "no-cache, no-store" always ;
+  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nscheme: $scheme\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
+}
+
+location  ~^/+server/lookup/+$ {
+  # The first set of variables are determining if there is a 
+  # match on top or micro - output should be type
+  #
+  set $backend $host_backend ;
+
+  add_header Content-Type text/plain always;
+  add_header X-Upstream "source_ip" always;
+  add_header Cache-Control "no-cache, no-store" always ;
+  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nscheme: $scheme\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
 }
 
 location  ~^/+server/lookup/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   # The first set of variables are determining if there is a 
   # match on top or micro - output should be type
   #
-  set $backend $top_backend ;
+  set $backend $host_backend ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+  }
 
   add_header Content-Type text/plain always;
-  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nhost: $host\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: \nmicro_backend: ";
+  add_header X-Upstream "source_ip" always;
+  add_header Cache-Control "no-cache, no-store" always ;
+  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nscheme: $scheme\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
 }
 
 # ####
@@ -162,7 +205,11 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   # The first set of variables are determining if there is a 
   # match on top or micro - output should be type
   #
-  set $backend $top_backend ;
+  set $backend $host_backend ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+  }
 
   if ($micro_backend) {
     set $backend $micro_backend ;
@@ -207,8 +254,12 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   # The first set of variables are determining if there is a 
   # match on top or micro - output should be type
   #
-  set $backend $top_backend ;
-  
+  set $backend $host_backend ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+  }
+
   add_header X-Lookup "input: (${toplevel}:) backend=${backend}(${top_backend}:)" always ;
 
   # Special case of WordPress we need to figure out if wpapp or wpassets

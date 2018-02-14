@@ -264,6 +264,21 @@ test_url "https-degree-advice-cgi" "https://${CONNECT_TO}/degree-advice/IRISLink
 test_url "http-healthcheck" "http://${CONNECT_TO}/server/healthcheck" 200  healthcheck OK
 test_url "https-healthcheck" "https://${CONNECT_TO}/server/healthcheck" 200  healthcheck OK
 
+# ####
+# Switch to our test virtual hosts
+#
+HOST="testhost1"
+test_url "vhost-http-root" "http://${CONNECT_TO}/" 200 wordpress 
+test_url "vhost-http-toplevel" "http://${CONNECT_TO}/content" 404 content 
+test_url "vhost-http-toplevelplus" "http://${CONNECT_TO}/content/foobar" 404 content 
+test_url "vhost-http-microsite" "http://${CONNECT_TO}/content/dbin/foo.txt" 404 dbin 
+
+HOST="testhost2"
+test_url "vhost-http-root" "http://${CONNECT_TO}/" 200 phpbin 
+test_url "vhost-http-toplevel" "http://${CONNECT_TO}/content" 404 content 
+test_url "vhost-http-toplevelplus" "http://${CONNECT_TO}/content/foobar" 404 content 
+test_url "vhost-http-microsite" "http://${CONNECT_TO}/content/dbin/foo.txt" 404 dbin 
+
 # to double-check stuff
 #debug=/bin/true
 #test_url "https-degree-advice-cgi" "https://${CONNECT_TO}/degree-advice/IRISLink.cgi" 302 degree-advice "idp/profile/SAML2/Redirect/SSO" "X-Backend-Protocol: http" "X-Backend-Host: test-backend"
