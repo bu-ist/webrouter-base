@@ -9,7 +9,10 @@ services:
     volumes:
       - ./test/results:/results
   bufe-autotest-test:
-    build: ./
+    build: 
+      context: ./
+      args:
+        landscape: test
     #build: apache/
     #build: nginx/
     #read_only: true

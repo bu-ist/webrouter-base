@@ -134,17 +134,37 @@ location ~^/server/lookup/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<seco
   }
 
   add_header Content-Type text/plain always;
-  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
+  add_header X-Upstream "source_ip" always;
+  add_header Cache-Control "no-cache, no-store" always ;
+  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nscheme: $scheme\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
+}
+
+location  ~^/+server/lookup/+$ {
+  # The first set of variables are determining if there is a 
+  # match on top or micro - output should be type
+  #
+  set $backend $host_backend ;
+
+  add_header Content-Type text/plain always;
+  add_header X-Upstream "source_ip" always;
+  add_header Cache-Control "no-cache, no-store" always ;
+  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nscheme: $scheme\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
 }
 
 location  ~^/+server/lookup/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   # The first set of variables are determining if there is a 
   # match on top or micro - output should be type
   #
-  set $backend $top_backend ;
+  set $backend $host_backend ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+  }
 
   add_header Content-Type text/plain always;
-  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nhost: $host\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: \nmicro_backend: ";
+  add_header X-Upstream "source_ip" always;
+  add_header Cache-Control "no-cache, no-store" always ;
+  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nscheme: $scheme\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
 }
 
 # ####
@@ -166,7 +186,11 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   # The first set of variables are determining if there is a 
   # match on top or micro - output should be type
   #
-  set $backend $top_backend ;
+  set $backend $host_backend ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+  }
 
   if ($micro_backend) {
     set $backend $micro_backend ;
@@ -211,8 +235,12 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   # The first set of variables are determining if there is a 
   # match on top or micro - output should be type
   #
-  set $backend $top_backend ;
-  
+  set $backend $host_backend ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+  }
+
   add_header X-Lookup "input: (${toplevel}:) backend=${backend}(${top_backend}:)" always ;
 
   # Special case of WordPress we need to figure out if wpapp or wpassets
