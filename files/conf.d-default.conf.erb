@@ -8,6 +8,12 @@ server {
     server_name  _;
     root         /usr/share/nginx/html;
 
+    # BU frontends provide these headers
+    #
+    proxy_set_header X-BU-Main-Uniqueid $http_x_amz_cf_id ;
+    proxy_set_header X-BU-Frontend AWS-Cluster ;
+    add_header X-BU-Main-Uniqueid $http_x_amz_cf_id always;
+
     # make certain that we set the appropriate host headers for proxying
     # we need to do this no matter what because the ALB will not clean up 
     # it's headers.
