@@ -26,10 +26,27 @@ location = /robots.txt {
 }
 
 location = / {
-  set $backend "content" ;
+  set $toplevel "index.html" ;
+
+  set $backend $host_backend ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+  }
+
+  #
+  # End results of above is a backend variable - next we determine 
+  # what to do
+  #
+  if ($backend = 'redirect') {
+    add_header X-Upstream "redirect" always;
+    return 302 $vanity_redirect ;
+  }
+
+  add_header X-Backend $backend always ;
+  add_header X-Upstream $backend always ;
 
   proxy_pass $scheme://$backend_hostname ;
-  add_header X-Upstream "content" always;
 
   if ($backend_cachecontrol) {
     add_header Cache-Control $backend_cachecontrol always ;
@@ -39,6 +56,8 @@ location = / {
     add_header X-Upstream $backend always ;
   }
 
+  #
+  resolver <%= ENV['NAMESERVER'] %> ;
 }
 
 location ~^/server/(?P<toplevel>version)$ {

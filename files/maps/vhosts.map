@@ -1,0 +1,13 @@
+# This map file will contain the vhosts routing entries.  
+# There is actually no difference between this and the sites.map so each entry must be 
+# unique.
+#
+# This version only has the data necessary for the automatic testing.
+#
+#testhost1/
+testhost1/content content ;
+testhost1/content/dbin dbin ;
+
+testhost2/index.html phpbin ;
+testhost2/content content ;
+testhost2/content/dbin dbin ;
