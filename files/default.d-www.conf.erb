@@ -6,14 +6,33 @@ rewrite_log on;
 #
 
 location = /robots.txt {
-  set $backend "content" ;
+  set $toplevel "robots.txt" ;
+
+  set $backend $host_backend ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+  }
+
+  #
+  # End results of above is a backend variable - next we determine 
+  # what to do
+  #
+  if ($backend = 'redirect') {
+    add_header X-Upstream "redirect" always;
+    return 302 $vanity_redirect ;
+  }
+
+  add_header X-Backend $backend always ;
+  add_header X-Upstream $backend always ;
 
 <% if ENV['ROBOTS_TXT'] %>
-  proxy_pass $scheme://$backend_hostname<%= ENV['ROBOTS_TXT'] %> ;
+  if ($hostkey = '_') {
+    proxy_pass $scheme://$backend_hostname<%= ENV['ROBOTS_TXT'] %> ;
+  } 
 <% else %>
   proxy_pass $scheme://$backend_hostname/robots.txt ;
 <% end %>
-  add_header X-Upstream "content" always;
 
   if ($backend_cachecontrol) {
     add_header Cache-Control $backend_cachecontrol always ;
@@ -23,6 +42,8 @@ location = /robots.txt {
     add_header X-Upstream $backend always ;
   }
 
+  #
+  resolver <%= ENV['NAMESERVER'] %> ;
 }
 
 location = / {
@@ -66,6 +87,22 @@ location ~^/server/(?P<toplevel>version)$ {
   add_header Cache-Control "no-cache, no-store" always ;
 
   return 200 "hostname: $hostname\nsites: $top_backend\nbase: <%= ENV['BUILDDATE'] %>";
+}
+
+location ~^/server/backend/(?P<backend>[a-z0-9\-]+)(?P<backend_uri>/.*)$ {
+  add_header Cache-Control "no-cache, no-store" always ;
+  add_header X-Uri "$backend_uri" always ;
+  proxy_pass $scheme://$backend_hostname$backend_uri ;
+ 
+  # only from some BU networks
+  allow 128.197.0.0/16 ;
+  allow 168.122.0.0/16 ;
+<% if ENV['ALLOW_DOCKER_NETS'] %>
+  # allow the private net used by docker compose
+  allow 172.0.0.0/8 ;
+<% end %>
+
+  deny all ;
 }
 
 location ~^/server/maps/(?P<map>[a-zA-Z0-9\.]+) {

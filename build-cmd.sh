@@ -3,6 +3,17 @@
 # Build a new version of the image
 #
 version="$(cat BUILDDATE.DAT)"
-docker build -t "dsmk/web-router-base:$version" .
+image="buist/websites-webrouter-base"
+fullimage="$image:$version"
+
+docker build -t "$fullimage" .
 # now we test it out
-docker run "dsmk/web-router-base:$version" /usr/sbin/run-nginx.sh -t 
+if docker run "$fullimage" /usr/sbin/run-nginx.sh -t ; then
+  # if it tests out then push to docker hub
+  docker push "$fullimage"
+else
+  echo "errors testing built image"
+fi
+
+#
+
