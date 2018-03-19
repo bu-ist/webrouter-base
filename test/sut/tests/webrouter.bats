@@ -189,19 +189,4 @@ setup () {
   assert_header_contains location "/idp/profile/SAML2/Redirect/SSO"
 }
 
-#@test "Healthcheck (http)" {
-#  #skip
-#  test_web http "$BUWEBHOST" /server/healthcheck
-#  assert_status 200
-#  assert_backend healthcheck
-#  assert_contains OK
-#}
-
-#@test "Healthcheck (https)" {
-#  #skip
-#  test_web https "$BUWEBHOST" /server/healthcheck
-#  assert_status 200
-#  assert_backend healthcheck
-#  assert_contains OK
-#}
 
