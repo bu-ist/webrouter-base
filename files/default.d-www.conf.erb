@@ -137,6 +137,20 @@ location ~^/server/hosts.map$ {
   deny all ;
 }
 
+location ~^/server/status$ {
+  stub_status on;
+  
+  # only from some BU networks
+  allow 128.197.0.0/16 ;
+  allow 168.122.0.0/16 ;
+<% if ENV['ALLOW_DOCKER_NETS'] %>
+  # allow the private net used by docker compose
+  allow 172.0.0.0/8 ;
+<% end %>
+
+  deny all ;
+}
+
 location ~^/server/source_ip$ {
   add_header X-Upstream "source_ip" always;
   add_header Content-Type text/plain always;
