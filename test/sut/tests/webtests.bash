@@ -182,7 +182,7 @@ function test_web {
   local url="${scheme}://${connect}${url}"
   echo "url=$url" 
 
-  if curl -i --insecure --silent --show-error -o "${tmp_file}.output" -H "Host:$host" "$url" ; then
+  if curl --max-redirs 0 -i --insecure --silent --show-error -o "${tmp_file}.output" -H "Host:$host" "$url" ; then
     cat "${tmp_file}.output" | parse_headers > "${tmp_file}.headers"
   fi
 }

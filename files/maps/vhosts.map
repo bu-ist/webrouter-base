@@ -11,3 +11,12 @@ testhost1/content/dbin dbin ;
 testhost2/index.html phpbin ;
 testhost2/content content ;
 testhost2/content/dbin dbin ;
+
+# everything with this host should redirect to another location with the request_uri
+redirecthost redirect ;
+
+# everything with this host should redirect to specific locations
+redirectasishost redirect_asis ;
+redirectasishost/tech redirect ;
+
+

@@ -2,3 +2,11 @@
 ### Processing maps/src/buedu-common.conf 
 _/studentlink /link/bin/uiscgi_studentlink.pl/uismpl/?ModuleName=menu.pl&NewMenu=Home ;
 ### Processing maps/src/buedu-syst.conf 
+
+# testing redirect stuff
+redirecthost $scheme://destinationhost ;
+redirectasishost https://www.google.com/ ;
+
+# the following adds the full URI so we don't want the trailing slash on these items
+redirectasishost/tech $scheme://www.bu.edu ;
+

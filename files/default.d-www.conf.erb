@@ -18,9 +18,13 @@ location = /robots.txt {
   # End results of above is a backend variable - next we determine 
   # what to do
   #
+  if ($backend = 'redirect_asis') {
+    add_header X-Upstream "redirect_asis" always;
+    return 302 $redirect_url ;
+  }
   if ($backend = 'redirect') {
     add_header X-Upstream "redirect" always;
-    return 302 $vanity_redirect ;
+    return 302 "$redirect_url$request_uri" ;
   }
 
   add_header X-Backend $backend always ;
@@ -50,18 +54,24 @@ location = / {
   set $toplevel "index.html" ;
 
   set $backend $host_backend ;
+  set $key $hostkey ;
 
   if ($top_backend) {
     set $backend $top_backend ;
+    set $key "$hostkey/$toplevel" ;
   }
 
   #
   # End results of above is a backend variable - next we determine 
   # what to do
   #
+  if ($backend = 'redirect_asis') {
+    add_header X-Upstream "redirect_asis" always;
+    return 302 $redirect_url ;
+  }
   if ($backend = 'redirect') {
     add_header X-Upstream "redirect" always;
-    return 302 $vanity_redirect ;
+    return 302 "$redirect_url$request_uri" ;
   }
 
   add_header X-Backend $backend always ;
@@ -197,19 +207,22 @@ location ~^/server/lookup/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<seco
   # match on top or micro - output should be type
   #
   set $backend $host_backend ;
+  set $key $hostkey ;
 
   if ($top_backend) {
     set $backend $top_backend ;
+    set $key "$hostkey/$toplevel" ;
   }
 
   if ($micro_backend) {
     set $backend $micro_backend ;
+    set $key "$hostkey/$microsite" ;
   }
 
   add_header Content-Type text/plain always;
   add_header X-Upstream "source_ip" always;
   add_header Cache-Control "no-cache, no-store" always ;
-  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nscheme: $scheme\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
+  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $redirect_url\nscheme: $scheme\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
 }
 
 location  ~^/+server/lookup/+$ {
@@ -217,11 +230,12 @@ location  ~^/+server/lookup/+$ {
   # match on top or micro - output should be type
   #
   set $backend $host_backend ;
+  set $key $hostkey ;
 
   add_header Content-Type text/plain always;
   add_header X-Upstream "source_ip" always;
   add_header Cache-Control "no-cache, no-store" always ;
-  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nscheme: $scheme\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
+  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $redirect_url\nscheme: $scheme\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
 }
 
 location  ~^/+server/lookup/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
@@ -229,15 +243,17 @@ location  ~^/+server/lookup/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   # match on top or micro - output should be type
   #
   set $backend $host_backend ;
+  set $key $hostkey ;
 
   if ($top_backend) {
     set $backend $top_backend ;
+    set $key "$hostkey/$toplevel" ;
   }
 
   add_header Content-Type text/plain always;
   add_header X-Upstream "source_ip" always;
   add_header Cache-Control "no-cache, no-store" always ;
-  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $vanity_redirect\nscheme: $scheme\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
+  return 200 "backend: $backend\ncachecontrol: $backend_cachecontrol\nredirect: $redirect_url\nscheme: $scheme\n\nhost: $host\nhostkey: $hostkey\nhost_backend: $host_backend\n\n\ntoplevel: $toplevel\ntop_backend: $top_backend\nmicro_site: $microsite\nmicro_backend: $micro_backend";
 }
 
 # ####
@@ -260,13 +276,16 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   # match on top or micro - output should be type
   #
   set $backend $host_backend ;
+  set $key $hostkey ;
 
   if ($top_backend) {
     set $backend $top_backend ;
+    set $key "$hostkey/$toplevel" ;
   }
 
   if ($micro_backend) {
     set $backend $micro_backend ;
+    set $key "$hostkey/$microsite" ;
   }
 
   add_header X-Lookup "input: (${toplevel}:${microsite}) backend=${backend}(${top_backend}:${micro_backend})" always ;
@@ -280,10 +299,13 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   #
   # End results of above is a backend variable - next we determine 
   # what to do
-  #
+  if ($backend = 'redirect_asis') {
+    add_header X-Upstream "redirect_asis" always;
+    return 302 $redirect_url ;
+  }
   if ($backend = 'redirect') {
     add_header X-Upstream "redirect" always;
-    return 302 $vanity_redirect ;
+    return 302 "$redirect_url$request_uri" ;
   }
 
   add_header X-Backend $backend always ;
@@ -309,9 +331,11 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   # match on top or micro - output should be type
   #
   set $backend $host_backend ;
+  set $key $hostkey ;
 
   if ($top_backend) {
     set $backend $top_backend ;
+    set $key "$hostkey/$toplevel" ;
   }
 
   add_header X-Lookup "input: (${toplevel}:) backend=${backend}(${top_backend}:)" always ;
@@ -329,9 +353,13 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   # End results of above is a backend variable - next we determine 
   # what to do
   #
+  if ($backend = 'redirect_asis') {
+    add_header X-Upstream "redirect_asis" always;
+    return 302 $redirect_url ;
+  }
   if ($backend = 'redirect') {
     add_header X-Upstream "redirect" always;
-    return 302 $vanity_redirect ;
+    return 302 "$redirect_url$request_uri" ;
   }
 
   add_header X-Backend $backend always ;
