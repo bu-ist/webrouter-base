@@ -3,7 +3,7 @@
 ### Processing maps/src/buedu-common.conf 
 _/version 2017-04-12 ;
 _/htbin legacy ;
-_/studentlink redirect ;
+_/studentlink redirect_asis ;
 _/buniverse phpbin ;
 _/maps phpbin ;
 _/bufellow/db-admin django ;
