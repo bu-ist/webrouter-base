@@ -9,6 +9,7 @@ location = /robots.txt {
   set $toplevel "robots.txt" ;
 
   set $backend $host_backend ;
+  set $key $hostkey; 
 
   if ($top_backend) {
     set $backend $top_backend ;
@@ -30,13 +31,14 @@ location = /robots.txt {
   add_header X-Backend $backend always ;
   add_header X-Upstream $backend always ;
 
+  # optionally override the default /robots.txt
+  set $rest $request_uri ;
 <% if ENV['ROBOTS_TXT'] %>
   if ($hostkey = '_') {
-    proxy_pass $scheme://$backend_hostname<%= ENV['ROBOTS_TXT'] %> ;
+    set $rest <%= ENV['ROBOTS_TXT'] %> ;
   } 
-<% else %>
-  proxy_pass $scheme://$backend_hostname/robots.txt ;
 <% end %>
+  proxy_pass $scheme://$backend_hostname$rest ;
 
   if ($backend_cachecontrol) {
     add_header Cache-Control $backend_cachecontrol always ;
