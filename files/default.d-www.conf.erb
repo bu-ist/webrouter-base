@@ -120,6 +120,40 @@ location ~^/server/backend/(?P<backend>[a-z0-9\-_]+)(?P<backend_uri>/.*)$ {
   deny all ;
 }
 
+location ~^/server/config/default.d/(?P<config>[a-z0-9\-_\.]+)$ {
+  add_header Cache-Control "no-cache, no-store" always ;
+  add_header X-Uri "$config" always ;
+
+  alias "/etc/nginx/default.d/$config" ;
+ 
+  # only from some BU networks
+  allow 128.197.0.0/16 ;
+  allow 168.122.0.0/16 ;
+<% if ENV['ALLOW_DOCKER_NETS'] %>
+  # allow the private net used by docker compose
+  allow 172.0.0.0/8 ;
+<% end %>
+
+  deny all ;
+}
+
+location ~^/server/config/conf.d/(?P<config>[a-z0-9\-_\.]+)$ {
+  add_header Cache-Control "no-cache, no-store" always ;
+  add_header X-Uri "$config" always ;
+
+  alias "/etc/nginx/conf.d/$config" ;
+ 
+  # only from some BU networks
+  allow 128.197.0.0/16 ;
+  allow 168.122.0.0/16 ;
+<% if ENV['ALLOW_DOCKER_NETS'] %>
+  # allow the private net used by docker compose
+  allow 172.0.0.0/8 ;
+<% end %>
+
+  deny all ;
+}
+
 location ~^/server/maps/(?P<map>[a-zA-Z0-9\.]+) {
   add_header Content-Type text/plain always;
   add_header Cache-Control "no-cache, no-store" always ;
