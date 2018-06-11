@@ -44,6 +44,12 @@ http {
     #
     proxy_buffer_size 12k;
 
+    # Make certain that our maximum post value matches the what the PHPBIN and WordPress backends
+    # support.  We might need to raise this even further if another backend needs to support larger
+    # files.
+    #
+    client_max_body_size 100m ;
+
     # adjusting because we don't want NGINX to be timing out connections - we will
     # leave that for other components.
     #
