@@ -1,18 +1,21 @@
-FROM docker.io/nginx
+FROM httpd:2.4-alpine
 
-RUN apt-get update && apt-get install openssl
+COPY httpd.conf /usr/local/apache2/conf/
+COPY httpd-ssl.conf /usr/local/apache2/conf/extras/
 
-ADD nginx.conf /etc/nginx/nginx.conf
-ADD default.conf /etc/nginx/conf.d/default.conf
-ADD mock.conf /etc/nginx/mock.conf
-COPY html/ /usr/share/nginx/html/
+#RUN apt-get update && apt-get install openssl
 
-ADD run-nginx.sh /usr/sbin/run-nginx.sh
-CMD /usr/sbin/run-nginx.sh
+#ADD nginx.conf /etc/nginx/nginx.conf
+#ADD default.conf /etc/nginx/conf.d/default.conf
+#ADD mock.conf /etc/nginx/mock.conf
+COPY html/ /usr/local/apache2/htdocs/
+
+#ADD run-nginx.sh /usr/sbin/run-nginx.sh
+#CMD /usr/sbin/run-nginx.sh
 
 #
-RUN mkdir -p /etc/pki/nginx \
-  && chmod 755 /usr/sbin/run-nginx.sh
+#RUN mkdir -p /etc/pki/nginx \
+#  && chmod 755 /usr/sbin/run-nginx.sh
 
 EXPOSE 80
 EXPOSE 443
