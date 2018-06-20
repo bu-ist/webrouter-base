@@ -2,6 +2,7 @@ FROM httpd:2.4-alpine
 
 COPY httpd.conf /usr/local/apache2/conf/
 COPY httpd-ssl.conf /usr/local/apache2/conf/extras/
+COPY httpd-mock.conf /usr/local/apache2/conf/extras/httpd-mock.conf
 
 #RUN apt-get update && apt-get install openssl
 
