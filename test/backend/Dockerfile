@@ -1,18 +1,17 @@
 FROM httpd:2.4-alpine
 
 COPY httpd.conf /usr/local/apache2/conf/
-COPY httpd-ssl.conf /usr/local/apache2/conf/extras/
-COPY httpd-mock.conf /usr/local/apache2/conf/extras/httpd-mock.conf
+COPY httpd-mock.conf /usr/local/apache2/conf/extra/httpd-mock.conf
 
 #RUN apt-get update && apt-get install openssl
 
-#ADD nginx.conf /etc/nginx/nginx.conf
-#ADD default.conf /etc/nginx/conf.d/default.conf
-#ADD mock.conf /etc/nginx/mock.conf
 COPY html/ /usr/local/apache2/htdocs/
 
-#ADD run-nginx.sh /usr/sbin/run-nginx.sh
-#CMD /usr/sbin/run-nginx.sh
+# ssl setup
+COPY httpd-ssl.conf /usr/local/apache2/conf/extra/
+COPY cert.pem /usr/local/apache2/conf/server.crt
+COPY cert.key /usr/local/apache2/conf/server.key
+
 
 #
 #RUN mkdir -p /etc/pki/nginx \
