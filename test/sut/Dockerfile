@@ -13,6 +13,7 @@ COPY tests/ ./tests/
 
 ENV CONNECT bufe-autotest-test
 ENV LANDSCAPE test
+ENV TESTBASE 1
 CMD ["./test_bats.sh" ]
 
 #CMD ["./test_app.sh", "-j", "test", "bufe-autotest-test"]
