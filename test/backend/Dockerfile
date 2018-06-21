@@ -5,13 +5,17 @@ COPY httpd-mock.conf /usr/local/apache2/conf/extra/httpd-mock.conf
 
 #RUN apt-get update && apt-get install openssl
 
+RUN apk --no-cache add perl-cgi
+
 COPY html/ /usr/local/apache2/htdocs/
+COPY cgi-bin/ /usr/local/apache2/cgi-bin/
 
 # ssl setup
 COPY httpd-ssl.conf /usr/local/apache2/conf/extra/
 COPY cert.pem /usr/local/apache2/conf/server.crt
 COPY cert.key /usr/local/apache2/conf/server.key
 
+RUN chmod 755 /usr/local/apache2/cgi-bin/*
 
 #
 #RUN mkdir -p /etc/pki/nginx \

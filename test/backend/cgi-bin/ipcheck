@@ -1,0 +1,25 @@
+#!/bin/sh
+# 
+# Simple IP check tool - it will only work if we provide the right header on the request (X-IPCHECK) and 
+# never outputs anything other than the REMOTE_ADDR value
+#
+# Low-risk approach to minimize exposure.  We use PATH_INFO for the input because httpd will sanitize the
+# input.  We are careful to never output the PATH_INFO field to prevent XSS type issues (we do log it
+# in the error log
+#
+echo "Content-type: text/plain"
+echo ""
+
+now=`/bin/date`
+
+if [ "x$PATH_INFO" != x ]; then
+  # check that the IP matches the input - add / to REMOTE_ADDR for PATH_INFO
+  if [ "x$PATH_INFO" = "x/$REMOTE_ADDR" ]; then
+    echo "OK"
+    echo "$now: ipcheck: OK $REMOTE_ADDR" >&2
+  else
+    echo "ERROR IP=$REMOTE_ADDR"
+    echo "$now: ipcheck: ERROR $REMOTE_ADDR not $PATH_INFO" >&2
+  fi
+fi
+exit
