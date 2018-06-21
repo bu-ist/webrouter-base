@@ -24,7 +24,7 @@ setup () {
     if [ "x$connect" = x ]; then
       connect="$BUWEBHOST"
     fi
-    myip=$(curl --silent "http://$connect/server/source_ip" | grep '^real-ip' | awk '{ print $2 }' )
+    myip=$(curl --silent "http://$connect/server/source_ip" | grep '^remote_addr' | awk '{ print $2 }' )
     #myip=$(dig +short myip.opendns.com @resolver1.opendns.com)
   fi
   #host=www-devl.bu.edu
