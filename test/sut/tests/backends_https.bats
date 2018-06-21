@@ -1,4 +1,9 @@
 #!/usr/bin/env bats
+#
+# The point of this test is to confirm that the backends are correctly trusting the 
+# front-end to provide the client IP. Therefore we compare the client IP seen on the 
+# backend with the front-end.  This does not correctly check that the F5 reverse proxy
+# is configured properly but we can not have everything.
 
 #declare -A web
 
@@ -14,7 +19,14 @@ setup () {
   # ####
   # Get our source IP according to the internet
   #
-  myip=$(dig +short myip.opendns.com @resolver1.opendns.com)
+  if [ "x$myip" = "x" ]; then
+    connect="$CONNECT"
+    if [ "x$connect" = x ]; then
+      connect="$BUWEBHOST"
+    fi
+    myip=$(curl --silent "http://$connect/server/source_ip" | grep '^real-ip' | awk '{ print $2 }' )
+    #myip=$(dig +short myip.opendns.com @resolver1.opendns.com)
+  fi
   #host=www-devl.bu.edu
 }
 
