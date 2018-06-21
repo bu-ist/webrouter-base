@@ -10,6 +10,18 @@ https_proxy=
 tmp_file="/tmp/test_url_$$"
 
 function setup_web {
+  # if we have set our special internal testing parameter then we set a
+  # bunch of defaults
+  # 
+  if [ "x$TEST_BASE" != x ]; then
+    if [ "x$CONNECT" = x ]; then
+      CONNECT=localhost
+    fi
+    if [ "x$LANDSCAPE" = x ]; then
+      LANDSCAPE=test
+    fi
+  fi
+
   # determine the landscape one of two ways:
   # 1) explicitly set in environment variable "landscape"
   # 2) implicitly set by hostname
