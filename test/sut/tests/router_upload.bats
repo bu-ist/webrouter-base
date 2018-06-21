@@ -168,7 +168,7 @@ setup () {
   rm "$tmp_file"
 
   #dump_web
-  assert_status 100
+  #assert_status 100
   # This returns the status 100 prequel which messes up our simple parsing
   assert_contains "413 Request Entity Too Large"
   #assert_content OK
