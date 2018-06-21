@@ -25,9 +25,10 @@ setup () {
   #skip "TEST MANUALLY: enable Query Monitor on the hub site"
   # http://www.bu.edu/nisdev/php5/antonk/aws-header-size-test/p9ijp3oifnp.php/?size=1000
   #set -x
-  test_web http "$BUWEBHOST" "/nisdev/php5/antonk/aws-header-size-test/p9ijp3oifnp.php/?size=2048"
+  #test_web http "$BUWEBHOST" "/nisdev/php5/antonk/aws-header-size-test/p9ijp3oifnp.php/?size=2048"
+  test_web http "$BUWEBHOST" "/htbin/headercheck.pl?size=2048"
   assert_status 200
-  assert_backend "phpbin"
+  assert_backend "legacy"
   assert_header_contains set_cookie "00_XYZ"
   assert_contains "OK"
 
@@ -37,9 +38,9 @@ setup () {
   #skip "TEST MANUALLY: enable Query Monitor on the hub site"
   # http://www.bu.edu/nisdev/php5/antonk/aws-header-size-test/p9ijp3oifnp.php/?size=1000
   #set -x
-  test_web http "$BUWEBHOST" "/nisdev/php5/antonk/aws-header-size-test/p9ijp3oifnp.php/?size=4096"
+  test_web http "$BUWEBHOST" "/htbin/headercheck.pl?size=4096"
   assert_status 200
-  assert_backend "phpbin"
+  assert_backend "legacy"
   assert_header_contains set_cookie "00_XYZ"
   assert_contains "OK"
 
@@ -49,9 +50,9 @@ setup () {
   #skip "TEST MANUALLY: enable Query Monitor on the hub site"
   # http://www.bu.edu/nisdev/php5/antonk/aws-header-size-test/p9ijp3oifnp.php/?size=7900"
   #set -x
-  test_web http "$BUWEBHOST" "/nisdev/php5/antonk/aws-header-size-test/p9ijp3oifnp.php/?size=7900"
+  test_web http "$BUWEBHOST" "/htbin/headercheck.pl?size=7900"
   assert_status 200
-  assert_backend "phpbin"
+  assert_backend "legacy"
   assert_header_contains set_cookie "00_XYZ"
   assert_contains "OK"
 
@@ -61,9 +62,9 @@ setup () {
   #skip "TEST MANUALLY: enable Query Monitor on the hub site"
   # http://www.bu.edu/nisdev/php5/antonk/aws-header-size-test/p9ijp3oifnp.php/?size=7900"
   #set -x
-  test_web http "$BUWEBHOST" "/nisdev/php5/antonk/aws-header-size-test/p9ijp3oifnp.php/?size=7900"
+  test_web http "$BUWEBHOST" "/htbin/headercheck.pl?size=7900"
   assert_status 200
-  assert_backend "phpbin"
+  assert_backend "legacy"
   assert_contains "OK"
 
 }
