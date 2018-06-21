@@ -72,10 +72,12 @@ function dump_headers {
 }
 
 function assert_backend {
-  val=$(get_header "x_bu_backend" | awk '{print $1}')
+  # primary value is X-Upstream with the secondary value being the old X-BU-Backend
+
+  val=$(get_header "x_upstream" )
   echo "x_bu_backend=$val"
   if [ -z "$val" ]; then
-    val=$(get_header "x_upstream")
+    val=$(get_header "x_bu_backend" | awk '{print $1}')
   fi
   echo "first-ten-characters: ${val:0:10}"
 
