@@ -81,6 +81,8 @@ location = / {
 
   proxy_pass $scheme://$backend_hostname ;
 
+  proxy_set_header Host $backend_hostheader ;
+
   if ($backend_cachecontrol) {
     add_header Cache-Control $backend_cachecontrol always ;
 
