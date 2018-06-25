@@ -40,6 +40,8 @@ location = /robots.txt {
 <% end %>
   proxy_pass $scheme://$backend_hostname$rest ;
 
+  proxy_set_header Host $backend_hostheader ;
+
   if ($backend_cachecontrol) {
     add_header Cache-Control $backend_cachecontrol always ;
 
@@ -111,6 +113,8 @@ location ~^/server/backend/(?P<backend>[a-z0-9\-_]+)(?P<backend_uri>/.*)$ {
 
   proxy_pass $scheme://$backend_hostname$backend_uri ;
  
+  proxy_set_header Host $backend_hostheader ;
+
   # only from some BU networks
   allow 128.197.0.0/16 ;
   allow 168.122.0.0/16 ;
@@ -351,6 +355,8 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
 
   proxy_pass $scheme://$backend_hostname ;
 
+  proxy_set_header Host $backend_hostheader ;
+
   if ($backend_cachecontrol) {
     add_header Cache-Control $backend_cachecontrol always ;
 
@@ -404,6 +410,8 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   add_header X-Upstream $backend always ;
 
   proxy_pass $scheme://$backend_hostname ;
+
+  proxy_set_header Host $backend_hostheader ;
 
   if ($backend_cachecontrol) {
     add_header Cache-Control $backend_cachecontrol always ;
