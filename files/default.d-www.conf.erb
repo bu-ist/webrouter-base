@@ -40,6 +40,18 @@ location = /robots.txt {
 <% end %>
   proxy_pass $scheme://$backend_hostname$rest ;
 
+  # ####
+  # The following headers have been moved here so we can do a map lookup to determine what host header
+  # to use for the proxy request to the backend.  Because NGINX wants all the proxy_set_headers to be in
+  # the same context we need to move all of them here.
+  #
+  proxy_set_header X-BU-Main-Uniqueid $http_x_amz_cf_id ;
+  proxy_set_header X-BU-Frontend AWS-Cluster ;
+  proxy_set_header X-Forwarded-Proto "$scheme" ;
+  proxy_set_header X-Method "$scheme" ;
+  # source IP address
+  proxy_set_header X-Forwarded-For $remote_addr ;
+  proxy_set_header X-Real-IP $remote_addr ;
   proxy_set_header Host $backend_hostheader ;
 
   if ($backend_cachecontrol) {
@@ -83,6 +95,18 @@ location = / {
 
   proxy_pass $scheme://$backend_hostname ;
 
+  # ####
+  # The following headers have been moved here so we can do a map lookup to determine what host header
+  # to use for the proxy request to the backend.  Because NGINX wants all the proxy_set_headers to be in
+  # the same context we need to move all of them here.
+  #
+  proxy_set_header X-BU-Main-Uniqueid $http_x_amz_cf_id ;
+  proxy_set_header X-BU-Frontend AWS-Cluster ;
+  proxy_set_header X-Forwarded-Proto "$scheme" ;
+  proxy_set_header X-Method "$scheme" ;
+  # source IP address
+  proxy_set_header X-Forwarded-For $remote_addr ;
+  proxy_set_header X-Real-IP $remote_addr ;
   proxy_set_header Host $backend_hostheader ;
 
   if ($backend_cachecontrol) {
@@ -113,6 +137,18 @@ location ~^/server/backend/(?P<backend>[a-z0-9\-_]+)(?P<backend_uri>/.*)$ {
 
   proxy_pass $scheme://$backend_hostname$backend_uri ;
  
+  # ####
+  # The following headers have been moved here so we can do a map lookup to determine what host header
+  # to use for the proxy request to the backend.  Because NGINX wants all the proxy_set_headers to be in
+  # the same context we need to move all of them here.
+  #
+  proxy_set_header X-BU-Main-Uniqueid $http_x_amz_cf_id ;
+  proxy_set_header X-BU-Frontend AWS-Cluster ;
+  proxy_set_header X-Forwarded-Proto "$scheme" ;
+  proxy_set_header X-Method "$scheme" ;
+  # source IP address
+  proxy_set_header X-Forwarded-For $remote_addr ;
+  proxy_set_header X-Real-IP $remote_addr ;
   proxy_set_header Host $backend_hostheader ;
 
   # only from some BU networks
@@ -355,6 +391,18 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
 
   proxy_pass $scheme://$backend_hostname ;
 
+  # ####
+  # The following headers have been moved here so we can do a map lookup to determine what host header
+  # to use for the proxy request to the backend.  Because NGINX wants all the proxy_set_headers to be in
+  # the same context we need to move all of them here.
+  #
+  proxy_set_header X-BU-Main-Uniqueid $http_x_amz_cf_id ;
+  proxy_set_header X-BU-Frontend AWS-Cluster ;
+  proxy_set_header X-Forwarded-Proto "$scheme" ;
+  proxy_set_header X-Method "$scheme" ;
+  # source IP address
+  proxy_set_header X-Forwarded-For $remote_addr ;
+  proxy_set_header X-Real-IP $remote_addr ;
   proxy_set_header Host $backend_hostheader ;
 
   if ($backend_cachecontrol) {
@@ -411,6 +459,18 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
 
   proxy_pass $scheme://$backend_hostname ;
 
+  # ####
+  # The following headers have been moved here so we can do a map lookup to determine what host header
+  # to use for the proxy request to the backend.  Because NGINX wants all the proxy_set_headers to be in
+  # the same context we need to move all of them here.
+  #
+  proxy_set_header X-BU-Main-Uniqueid $http_x_amz_cf_id ;
+  proxy_set_header X-BU-Frontend AWS-Cluster ;
+  proxy_set_header X-Forwarded-Proto "$scheme" ;
+  proxy_set_header X-Method "$scheme" ;
+  # source IP address
+  proxy_set_header X-Forwarded-For $remote_addr ;
+  proxy_set_header X-Real-IP $remote_addr ;
   proxy_set_header Host $backend_hostheader ;
 
   if ($backend_cachecontrol) {
