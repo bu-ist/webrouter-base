@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Restricted Content"
+AuthUserFile /usr/local/apacher2/htdocs/test/basic/.htpasswd
+Require valid-user
