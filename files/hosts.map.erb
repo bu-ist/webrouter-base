@@ -19,5 +19,9 @@ uiscgi_app <%= ENV['BACKEND_UISCGI_APP'] || "ist-uiscgi-app-#{ENV['LANDSCAPE']}.
 
 uiscgi_content <%= ENV['BACKEND_UISCGI_CONTENT'] || "ist-uiscgi-content-#{ENV['LANDSCAPE']}.bu.edu" %> ;
 
+# This is a test backend so we can confirm that the host header mapping necessary for S3 buckets works properly
+#
+checkhostheader <%= ENV['BACKEND_W3_CONTENT'] || "ist-w3-content-#{ENV['LANDSCAPE']}.bu.edu" %> ;
+
 # WebTeams development s3 bucket
 s3bucket homepage-devl.s3-website-us-east-1.amazonaws.com ;

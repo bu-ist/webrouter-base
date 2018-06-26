@@ -1,1 +1,16 @@
-  s3bucket homepage-devl.s3-website-us-east-1.amazonaws.com ;
+# The values in this file override the default host header which is the Host header that NGINX received ($host).
+#
+# Most entries will be of form:
+# 
+# backend_name $backend_hostname ;
+#
+# This will set the header to the backend/upstream hostname.  This is necessary for all 
+# S3 buckets.
+#
+s3bucket $backend_hostname ;
+
+# This test entry is to a fixed value to simplify the test scripts
+checkhostheader hostheader.bu.edu ;
+
+#checkhostheader $backend_hostname ;
+
