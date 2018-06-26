@@ -137,7 +137,7 @@ location ~^/server/backend/(?P<backend>[a-z0-9\-_]+)(?P<backend_uri>/.*)$ {
   add_header X-Backend $backend always;
   add_header X-Upstream $backend always;
 
-  proxy_pass $scheme://$backend_hostname$backend_uri ;
+  proxy_pass $scheme://$backend_hostname$backend_uri?$query_string ;
  
   # ####
   # The following headers have been moved here so we can do a map lookup to determine what host header
