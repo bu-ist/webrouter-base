@@ -49,6 +49,7 @@ location = /robots.txt {
   proxy_set_header X-BU-Frontend AWS-Cluster ;
   proxy_set_header X-Forwarded-Proto "$scheme" ;
   proxy_set_header X-Method "$scheme" ;
+  proxy_set_header X-SSL $backend_xssl ;
   # source IP address
   proxy_set_header X-Forwarded-For $remote_addr ;
   proxy_set_header X-Real-IP $remote_addr ;
@@ -104,6 +105,7 @@ location = / {
   proxy_set_header X-BU-Frontend AWS-Cluster ;
   proxy_set_header X-Forwarded-Proto "$scheme" ;
   proxy_set_header X-Method "$scheme" ;
+  proxy_set_header X-SSL $backend_xssl ;
   # source IP address
   proxy_set_header X-Forwarded-For $remote_addr ;
   proxy_set_header X-Real-IP $remote_addr ;
@@ -146,6 +148,7 @@ location ~^/server/backend/(?P<backend>[a-z0-9\-_]+)(?P<backend_uri>/.*)$ {
   proxy_set_header X-BU-Frontend AWS-Cluster ;
   proxy_set_header X-Forwarded-Proto "$scheme" ;
   proxy_set_header X-Method "$scheme" ;
+  proxy_set_header X-SSL $backend_xssl ;
   # source IP address
   proxy_set_header X-Forwarded-For $remote_addr ;
   proxy_set_header X-Real-IP $remote_addr ;
@@ -400,6 +403,7 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   proxy_set_header X-BU-Frontend AWS-Cluster ;
   proxy_set_header X-Forwarded-Proto "$scheme" ;
   proxy_set_header X-Method "$scheme" ;
+  proxy_set_header X-SSL $backend_xssl ;
   # source IP address
   proxy_set_header X-Forwarded-For $remote_addr ;
   proxy_set_header X-Real-IP $remote_addr ;
@@ -468,6 +472,7 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   proxy_set_header X-BU-Frontend AWS-Cluster ;
   proxy_set_header X-Forwarded-Proto "$scheme" ;
   proxy_set_header X-Method "$scheme" ;
+  proxy_set_header X-SSL $backend_xssl ;
   # source IP address
   proxy_set_header X-Forwarded-For $remote_addr ;
   proxy_set_header X-Real-IP $remote_addr ;

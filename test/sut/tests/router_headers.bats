@@ -51,3 +51,7 @@ envcheck () {
   envcheck HTTP_X_SSL on https
 }
 
+@test "router_headers: X-SSL blank (http)" {
+  envcheck HTTP_X_SSL '' http
+}
+
