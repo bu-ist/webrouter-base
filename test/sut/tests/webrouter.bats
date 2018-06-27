@@ -18,6 +18,7 @@ setup () {
 #}
 
 @test "wpapp-http-admissions" {
+  skip_landscapes syst
   test_web http "$BUWEBHOST" /admissions/ 
   assert_status 200
   assert_backend "wordpress"
@@ -30,6 +31,7 @@ setup () {
 }
 
 @test "wpapp-https-admissions" {
+  skip_landscapes syst
   test_web https "$BUWEBHOST" /admissions/ 
   assert_status 200
   assert_backend "wordpress"
