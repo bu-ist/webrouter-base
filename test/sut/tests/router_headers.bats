@@ -40,10 +40,12 @@ envcheck () {
 }
 
 @test "router_headers: X-Method https" {
+  [ "x$TEST_BASE" = x ] && skip "only done when testing base images"
   envcheck HTTP_X_METHOD https https
 }
 
 @test "router_headers: X-BU-Frontend AWS-Cluster" {
+  [ "x$TEST_BASE" = x ] && skip "only done when testing base images"
   envcheck HTTP_X_BU_FRONTEND AWS-Cluster
 }
 
