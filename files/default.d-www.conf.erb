@@ -38,7 +38,7 @@ location = /robots.txt {
     set $rest <%= ENV['ROBOTS_TXT'] %> ;
   } 
 <% end %>
-  proxy_pass $scheme://$backend_hostname$rest ;
+  proxy_pass $backend_scheme://$backend_hostname$rest ;
 
   # ####
   # The following headers have been moved here so we can do a map lookup to determine what host header
@@ -94,7 +94,7 @@ location = / {
   add_header X-Backend $backend always ;
   add_header X-Upstream $backend always ;
 
-  proxy_pass $scheme://$backend_hostname ;
+  proxy_pass $backend_scheme://$backend_hostname ;
 
   # ####
   # The following headers have been moved here so we can do a map lookup to determine what host header
@@ -137,7 +137,7 @@ location ~^/server/backend/(?P<backend>[a-z0-9\-_]+)(?P<backend_uri>/.*)$ {
   add_header X-Backend $backend always;
   add_header X-Upstream $backend always;
 
-  proxy_pass $scheme://$backend_hostname$backend_uri?$query_string ;
+  proxy_pass $backend_scheme://$backend_hostname$backend_uri?$query_string ;
  
   # ####
   # The following headers have been moved here so we can do a map lookup to determine what host header
@@ -392,7 +392,7 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   add_header X-Backend $backend always ;
   add_header X-Upstream $backend always ;
 
-  proxy_pass $scheme://$backend_hostname ;
+  proxy_pass $backend_scheme://$backend_hostname ;
 
   # ####
   # The following headers have been moved here so we can do a map lookup to determine what host header
@@ -461,7 +461,7 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   add_header X-Backend $backend always ;
   add_header X-Upstream $backend always ;
 
-  proxy_pass $scheme://$backend_hostname ;
+  proxy_pass $backend_scheme://$backend_hostname ;
 
   # ####
   # The following headers have been moved here so we can do a map lookup to determine what host header

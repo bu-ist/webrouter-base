@@ -45,3 +45,10 @@ setup () {
   assert_contains "PASSED"
 }
 
+@test "router_s3buckets: https client request mapped to http S3 bucket request"  {
+  [ "x$TEST_BASE" = x ] && skip "only done when testing base images until content server updated"
+  test_web https "$BUWEBHOST" "/server/backend/checkhostheader/cgi-bin/envcheck.pl?env=REQUEST_SCHEME&expected=http"
+  assert_status 200
+  assert_contains "PASSED"
+}
+
