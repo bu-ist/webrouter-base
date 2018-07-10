@@ -21,6 +21,36 @@ setup () {
   #webrouter_header_size="1024"
 }
 
+@test "homepage: http homepage request" {
+  test_web http "$BUWEBHOST" /
+  assert_status 200
+  # eventually it should be 
+  #assert_backend "content"
+  # right now it can be one of two values - legacy for Solaris servers and content for all others
+  # 6/26/2018: now that we have transitioned it can only be 
+  # content or aws_home_index depending on whether we have 
+  # moved the homepage to aws
+  #
+  assert_backend content aws_home_index
+
+  assert_contains '<!-- HPPUBDDATE'
+}
+
+@test "homepage: https homepage request" {
+  test_web https "$BUWEBHOST" /
+  assert_status 200
+  # eventually it should be 
+  #assert_backend "content"
+  # right now it can be one of two values - legacy for Solaris servers and content for all others
+  # 6/26/2018: now that we have transitioned it can only be 
+  # content or aws_home_index depending on whether we have 
+  # moved the homepage to aws
+  #
+  assert_backend content aws_home_index
+
+  assert_contains '<!-- HPPUBDDATE'
+}
+
 @test "homepage: /alert messages process correctly" {
   skip "TEST MANUALLY: bu.edu/alert/includes/all.htm and make certain that the CORS headers are present"
 }

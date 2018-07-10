@@ -140,21 +140,6 @@ setup () {
   fi
 }
 
-@test "Homepage" {
-  test_web http "$BUWEBHOST" /
-  assert_status 200
-  # eventually it should be 
-  #assert_backend "content"
-  # right now it can be one of two values - legacy for Solaris servers and content for all others
-  # 6/26/2018: now that we have transitioned it can only be 
-  # content or aws_home_index depending on whether we have 
-  # moved the homepage to aws
-  #
-  assert_backend content aws_home_index
-
-  assert_contains '<!-- HPPUBDDATE'
-}
-
 @test "Students WordPress site" {
   skip_landscapes syst
   test_web http "$BUWEBHOST" /students/
