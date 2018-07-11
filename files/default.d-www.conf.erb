@@ -199,7 +199,7 @@ location ~^/server/config/conf.d/(?P<config>[a-z0-9\-_\.]+)$ {
   deny all ;
 }
 
-location ~^/server/maps/(?P<map>[a-zA-Z0-9\.]+) {
+location ~^/server/maps/(?P<map>[a-zA-Z0-9_\.]+) {
   add_header Content-Type text/plain always;
   add_header Cache-Control "no-cache, no-store" always ;
   alias "/etc/nginx/maps/$map" ;
