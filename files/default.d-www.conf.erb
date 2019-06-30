@@ -68,7 +68,15 @@ location = /robots.txt {
 }
 
 location = / {
-  set $toplevel "index.html" ;
+  # The following conditional logic supports the bare homepage going to the network/host default
+  # backend (presumably WordPress) if the root uri has a query string.  Otherwise it goes to the 
+  # backend specified by index.html.
+  #
+  # This is necessary for the One Editorial homepage edit/preview process.
+  # 
+  if ($query_string = '') {
+    set $toplevel "index.html" ;
+  }
 
   set $backend $host_backend ;
   set $key $hostkey ;
