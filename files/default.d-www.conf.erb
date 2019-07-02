@@ -72,7 +72,9 @@ location = / {
   # backend (presumably WordPress) if the root uri has a query string.  Otherwise it goes to the 
   # backend specified by index.html.
   #
-  # This is necessary for the One Editorial homepage edit/preview process.
+  # This is necessary for the One Editorial homepage edit/preview process.  Preview links for
+  # unpublished posts (without permalinks) go to the root site domain with just a query parameter
+  # like www.bu.edu/?page_id=1234&preview=true, so these need to be routed to WordPress.
   # 
   if ($query_string = '') {
     set $toplevel "index.html" ;
