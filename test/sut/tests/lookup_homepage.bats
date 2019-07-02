@@ -11,14 +11,6 @@ teardown () {
 
 setup () {
   setup_web
-
-#  upload_test_size=95000000
-  #
-#  webrouter_header_size="8000"
-  #webrouter_header_size="7000"
-  #webrouter_header_size="4096"
-  #webrouter_header_size="2048"
-  #webrouter_header_size="1024"
 }
 
 @test "lookup_homepage: confirm that /server/lookup/?page_id=2002 works properly" {
