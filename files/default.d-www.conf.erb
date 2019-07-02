@@ -318,8 +318,17 @@ location  ~^/+server/lookup/+$ {
   # The first set of variables are determining if there is a 
   # match on top or micro - output should be type
   #
+  if ($query_string = '') {
+    set $toplevel "index.html" ;
+  }
+
   set $backend $host_backend ;
   set $key $hostkey ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+    set $key "$hostkey/$toplevel" ;
+  }
 
   add_header Content-Type text/plain always;
   add_header X-Upstream "source_ip" always;
