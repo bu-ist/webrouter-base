@@ -168,6 +168,7 @@ location ~^/server/backend/(?P<backend>[a-z0-9\-_]+)(?P<backend_uri>/.*)$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -185,6 +186,7 @@ location ~^/server/config/default.d/(?P<config>[a-z0-9\-_\.]+)$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -202,6 +204,7 @@ location ~^/server/config/conf.d/(?P<config>[a-z0-9\-_\.]+)$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -218,6 +221,7 @@ location ~^/server/maps/(?P<map>[a-zA-Z0-9_\.]+) {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -234,6 +238,7 @@ location ~^/server/hosts.map$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -248,6 +253,7 @@ location ~^/server/status$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -265,6 +271,7 @@ location ~^/server/source_ip$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -282,6 +289,7 @@ location ~^/server/cloudfront_ips$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
