@@ -68,7 +68,17 @@ location = /robots.txt {
 }
 
 location = / {
-  set $toplevel "index.html" ;
+  # The following conditional logic supports the bare homepage going to the network/host default
+  # backend (presumably WordPress) if the root uri has a query string.  Otherwise it goes to the 
+  # backend specified by index.html.
+  #
+  # This is necessary for the One Editorial homepage edit/preview process.  Preview links for
+  # unpublished posts (without permalinks) go to the root site domain with just a query parameter
+  # like www.bu.edu/?page_id=1234&preview=true, so these need to be routed to WordPress.
+  # 
+  if ($query_string = '') {
+    set $toplevel "index.html" ;
+  }
 
   set $backend $host_backend ;
   set $key $hostkey ;
@@ -160,6 +170,7 @@ location ~^/server/backend/(?P<backend>[a-z0-9\-_]+)(?P<backend_uri>/.*)$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -177,6 +188,7 @@ location ~^/server/config/default.d/(?P<config>[a-z0-9\-_\.]+)$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -194,6 +206,7 @@ location ~^/server/config/conf.d/(?P<config>[a-z0-9\-_\.]+)$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -210,6 +223,7 @@ location ~^/server/maps/(?P<map>[a-zA-Z0-9_\.]+) {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -226,6 +240,7 @@ location ~^/server/hosts.map$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -240,6 +255,7 @@ location ~^/server/status$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -257,6 +273,7 @@ location ~^/server/source_ip$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -274,6 +291,7 @@ location ~^/server/cloudfront_ips$ {
 <% if ENV['ALLOW_DOCKER_NETS'] %>
   # allow the private net used by docker compose
   allow 172.0.0.0/8 ;
+  allow 192.168.0.0/16 ;
 <% end %>
 
   deny all ;
@@ -310,8 +328,17 @@ location  ~^/+server/lookup/+$ {
   # The first set of variables are determining if there is a 
   # match on top or micro - output should be type
   #
+  if ($query_string = '') {
+    set $toplevel "index.html" ;
+  }
+
   set $backend $host_backend ;
   set $key $hostkey ;
+
+  if ($top_backend) {
+    set $backend $top_backend ;
+    set $key "$hostkey/$toplevel" ;
+  }
 
   add_header Content-Type text/plain always;
   add_header X-Upstream "source_ip" always;
