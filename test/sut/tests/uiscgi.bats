@@ -15,6 +15,7 @@ setup () {
 #}
 
 @test "http: Add trailing slash to /link" {
+  skip "SKIPPING for now as there is a timeout issue affecting UISCGI"
   test_web http "$BUWEBHOST" /link
   assert_status 301
   assert_header location "http://$BUWEBHOST/link/"
@@ -22,6 +23,7 @@ setup () {
 }
 
 @test "https: Redirect /link/ to UISCGI" {
+  skip "SKIPPING for now as there is a timeout issue affecting UISCGI"
   test_web https "$BUWEBHOST" /link/
   assert_status 302
   assert_header location "https://$BUWEBHOST/link/bin/uiscgi.pl/uismpl/menu"
@@ -30,6 +32,7 @@ setup () {
 
 # this will eventually redirect to SSL
 @test "http: UISCGI non-ssl main menu" {
+  skip "SKIPPING for now as there is a timeout issue affecting UISCGI"
   test_web http "$BUWEBHOST" /link/bin/uiscgi.pl/uismpl/menu
   assert_status 200
   assert_contains "/link/system/images/bu-logo.gif"
@@ -37,6 +40,7 @@ setup () {
 }
 
 @test "https: UISCGI ssl main menu shows the main menu" {
+  skip "SKIPPING for now as there is a timeout issue affecting UISCGI"
   test_web https "$BUWEBHOST" /link/bin/uiscgi.pl/uismpl/menu
   assert_status 200
   assert_contains "/link/system/images/bu-logo.gif"
@@ -44,6 +48,7 @@ setup () {
 }
 
 @test "http: Test that UISCGI outputs cache control header" {
+  skip "SKIPPING for now as there is a timeout issue affecting UISCGI"
   test_web http "$BUWEBHOST" /link/bin/args.pl
   assert_status 200
   assert_backend "uiscgi_app"
@@ -54,12 +59,14 @@ setup () {
 }
 
 @test "http: Studentlink redirect" {
+  skip "SKIPPING for now as there is a timeout issue affecting UISCGI"
   test_web http "$BUWEBHOST" /studentlink/
   assert_status 302
   assert_header location "http://$BUWEBHOST/link/bin/uiscgi_studentlink.pl/uismpl/?ModuleName=menu.pl&NewMenu=Home"
 }
 
 @test "StudentLink main menu and mainframe CUSSP call" {
+  skip "SKIPPING for now as there is a timeout issue affecting UISCGI"
   test_web http "$BUWEBHOST" '/link/bin/uiscgi_studentlink.pl/1486741068?ModuleName=univschr.pl&SearchOptionDesc=Distance+Education&SearchOptionCd=D&KeySem=20183&ViewSem=Fall+2017'
   assert_status 200
   assert_backend "uiscgi_app"
