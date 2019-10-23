@@ -72,7 +72,7 @@ setup () {
 }
 
 @test "router_limits: 20M file upload test (http)" {
-  #skip "SKIPPING for now as there is a timeout issue affecting larger file uploads"
+  skip "SKIPPING for now as there is a timeout issue affecting larger file uploads"
   # create temp file of that size
   #
   tmp_file="/tmp/upload_test.$$"
@@ -98,7 +98,7 @@ setup () {
 }
 
 @test "router_limits: 50M file upload test (http)" {
-  #skip "SKIPPING for now as there is a timeout issue affecting larger file uploads"
+  skip "SKIPPING for now as there is a timeout issue affecting larger file uploads"
   # create temp file of that size
   #
   tmp_file="/tmp/upload_test.$$"
@@ -124,7 +124,7 @@ setup () {
 }
 
 @test "router_limits: 90M file upload test (http)" {
-  #skip "SKIPPING for now as there is a timeout issue affecting larger file uploads"
+  skip "SKIPPING for now as there is a timeout issue affecting larger file uploads"
   # create temp file of that size
   #
   tmp_file="/tmp/upload_test.$$"
@@ -150,7 +150,7 @@ setup () {
 }
 
 @test "router_limits: 110M file upload test should fail with 413 code (http)" {
-  #skip "SKIPPING for now as there is a timeout issue affecting larger file uploads"
+  skip "SKIPPING for now as there is a timeout issue affecting larger file uploads"
   # create temp file of that size
   #
   tmp_file="/tmp/upload_test.$$"
