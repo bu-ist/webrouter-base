@@ -1,0 +1,42 @@
+---
+name: "role: ist-managed"
+on:
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'roles/ist-managed/**'
+  #     - '.github/workflows/role_ist-managed.yml'
+  #     - 'howtos/ansible-requirements.txt'
+  #     - 'howtos/python-requirements.txt'
+  pull_request:
+    # paths:
+    #   - 'roles/ist-managed/**'
+    #   - '.github/workflows/role_ist-managed.yml'
+    #   - 'howtos/ansible-requirements.txt'
+    #   - 'howtos/python-requirements.txt'
+    # env:
+    #   PY_COLORS: 1
+    #   ANSIBLE_FORCE_COLOR: 1
+jobs:
+  function_test:
+    name: "webrouter-function-test"
+    runs-on: ubuntu-latest
+    # strategy:
+    #     matrix:
+    #         distro:
+    #             - ubuntu2004
+    #             - debian10
+    #             - centos7
+    #             #- centos8
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Check out the codebase
+        uses: actions/checkout@v2
+
+      - name: Check our environment
+        run: "docker --version ; docker-compose --version ; docker ps -a "
+
+      - name: Run docker-compose test
+        run: "docker-compose -f autotest-test-disable.yml up --build --exit-code-from sut"
