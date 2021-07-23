@@ -15,3 +15,5 @@ s3bucket http ;
 # This test entry is to a fixed value to simplify the test scripts
 checkhostheader http ;
 
+# bi_backend always uses http
+bi_backend http ;

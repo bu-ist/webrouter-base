@@ -19,4 +19,8 @@ redirecthost redirect ;
 redirectasishost redirect_asis ;
 redirectasishost/tech redirect ;
 
+# custom domains - 
+bi.bu.edu/index.html redirect_asis ;
+bi.bu.edu bi_backend ;
+
 
