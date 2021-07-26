@@ -29,5 +29,5 @@ setup () {
   #[ "x$TEST_BASE" = x ] && skip "only done when testing base images"
   test_web https "bi.bu.edu" "/MicroStrategy/"
   assert_status 200
-  #assert_backend "bibackend"
+  assert_backend "bi_backend"
 }
