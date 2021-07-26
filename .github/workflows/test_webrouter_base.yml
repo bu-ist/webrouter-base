@@ -1,5 +1,5 @@
 ---
-name: "role: ist-managed"
+name: "webrouter-function-test"
 on:
   # push:
   #   branches:
@@ -35,8 +35,8 @@ jobs:
       - name: Check out the codebase
         uses: actions/checkout@v2
 
-      - name: Check our environment
-        run: "docker --version ; docker-compose --version ; docker ps -a "
+      - name: Run docker-compose test
+        run: "docker-compose -f autotest-test-disable.yml build"
 
       - name: Run docker-compose test
-        run: "docker-compose -f autotest-test-disable.yml up --build --exit-code-from sut"
+        run: "docker-compose -f autotest-test-disable.yml up --exit-code-from sut"
