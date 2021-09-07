@@ -49,6 +49,14 @@ envcheck () {
   envcheck HTTP_X_BU_FRONTEND AWS-Cluster
 }
 
+@test "router_headers: X-Forwarded-Host set to original Host (http)" {
+  envcheck HTTP_X_FORWARDED_HOST www-test.bu.edu http
+}
+
+@test "router_headers: X-Forwarded-Host set to original Host (https)" {
+  envcheck HTTP_X_FORWARDED_HOST www-test.bu.edu https
+}
+
 @test "router_headers: X-SSL on (https)" {
   envcheck HTTP_X_SSL on https
 }
