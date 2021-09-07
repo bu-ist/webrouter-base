@@ -2,12 +2,16 @@ version: "2"
 services:
   test-backend:
     build: test/backend/
+  "ist-mstrbi-p":
+    build: test/customdomain_backend/
   sut:
     build: test/sut/
     links:
       - bufe-autotest-test
     volumes:
       - ./test/results:/results
+    # environment:
+    #   - TEST_BASE=1
   bufe-autotest-test:
     build: 
       context: ./
@@ -25,3 +29,4 @@ services:
       - ALLOW_DOCKER_NETS=true
     links:
       - test-backend
+      - "ist-mstrbi-p"

@@ -10,3 +10,4 @@ redirectasishost https://www.google.com/ ;
 # the following adds the full URI so we don't want the trailing slash on these items
 redirectasishost/tech $scheme://www.bu.edu ;
 
+bi.bu.edu/index.html http://bi.bu.edu/MicroStrategy/servlet/mstrWeb ;
