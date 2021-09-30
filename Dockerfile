@@ -50,7 +50,6 @@ ADD files/html /usr/share/nginx/html/
 
 # the default map configuration is for internal testing
 ADD files/hosts.map.erb /etc/erb/nginx/hosts.map.erb
-ADD files/vars.sh /etc/nginx/vars.sh
 
 # this copies over the entire maps tree
 ADD files/maps /etc/nginx/maps

@@ -7,12 +7,6 @@ if [ "x$LANDSCAPE" = "x" ]; then
   export LANDSCAPE
 fi
 
-# get common variables from the vars.sh 
-#
-if [ -f /etc/nginx/vars.sh ]; then
-  . /etc/nginx/vars.sh
-fi
-
 # get a nameserver from the system for nginx resolver lines
 #NAMESERVER=`/bin/grep ^nameserver /etc/resolv.conf | /bin/awk '{print $2}' | head -1 `
 #export NAMESERVER
