@@ -58,3 +58,4 @@ ADD files/maps /etc/nginx/maps
 # this is not being persistent for some reason - we will punt and generate the maps outside for now
 #RUN /usr/sbin/bu-build-maps.sh && ls -l /etc/nginx/maps
 
+ENV LOG_LEVEL warn
