@@ -18,5 +18,15 @@ services:
     environment:
       - LANDSCAPE=test
       - ALLOW_DOCKER_NETS=true
+      - BACKEND_REDIRECT=test-backend
+      - BACKEND_WEB_LEGACY=test-backend
+      - BACKEND_W3_CONTENT=test-backend
+      - BACKEND_W3_MEDIA=test-backend
+      - BACKEND_WP_APP=test-backend
+      - BACKEND_WP_CONTENT=test-backend
+      - BACKEND_PHPBIN=test-backend
+      - BACKEND_DBIN=test-backend
+      - BACKEND_DJANGO=test-backend
+      - BACKEND_DEGREE_ADVICE=test-backend
     links:
       - test-backend
