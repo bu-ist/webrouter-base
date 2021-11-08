@@ -1,7 +1,7 @@
 rewrite_log on;
 
 # ####
-# These paths are specified as locations because they don't need to be dynamic.  Use standard NGINX 
+# These paths are specified as locations because they don't need to be dynamic.  Use standard NGINX
 # whenever possible.
 #
 
@@ -9,14 +9,14 @@ location = /robots.txt {
   set $toplevel "robots.txt" ;
 
   set $backend $host_backend ;
-  set $key $hostkey; 
+  set $key $hostkey;
 
   if ($top_backend) {
     set $backend $top_backend ;
   }
 
   #
-  # End results of above is a backend variable - next we determine 
+  # End results of above is a backend variable - next we determine
   # what to do
   #
   if ($backend = 'redirect_asis') {
@@ -36,7 +36,7 @@ location = /robots.txt {
 <% if ENV['ROBOTS_TXT'] %>
   if ($hostkey = '_') {
     set $rest <%= ENV['ROBOTS_TXT'] %> ;
-  } 
+  }
 <% end %>
   proxy_pass $backend_scheme://$backend_hostname$rest ;
 
@@ -69,15 +69,16 @@ location = /robots.txt {
   resolver <%= ENV['NAMESERVER'] %> ;
 }
 
+# Case 1: root path
 location = / {
   # The following conditional logic supports the bare homepage going to the network/host default
-  # backend (presumably WordPress) if the root uri has a query string.  Otherwise it goes to the 
+  # backend (presumably WordPress) if the root uri has a query string.  Otherwise it goes to the
   # backend specified by index.html.
   #
   # This is necessary for the One Editorial homepage edit/preview process.  Preview links for
   # unpublished posts (without permalinks) go to the root site domain with just a query parameter
   # like www.bu.edu/?page_id=1234&preview=true, so these need to be routed to WordPress.
-  # 
+  #
   if ($query_string = '') {
     set $toplevel "index.html" ;
   }
@@ -91,7 +92,7 @@ location = / {
   }
 
   #
-  # End results of above is a backend variable - next we determine 
+  # End results of above is a backend variable - next we determine
   # what to do
   #
   if ($backend = 'redirect_asis') {
@@ -106,7 +107,7 @@ location = / {
   add_header X-Backend $backend always ;
   add_header X-Upstream $backend always ;
 
-  proxy_pass $backend_scheme://$backend_hostname ;
+  proxy_pass $backend_scheme://$backend_hostname$request_uri ;
 
   # ####
   # The following headers have been moved here so we can do a map lookup to determine what host header
@@ -152,7 +153,7 @@ location ~^/server/backend/(?P<backend>[a-z0-9\-_]+)(?P<backend_uri>/.*)$ {
   add_header X-Upstream $backend always;
 
   proxy_pass $backend_scheme://$backend_hostname$backend_uri?$query_string ;
- 
+
   # ####
   # The following headers have been moved here so we can do a map lookup to determine what host header
   # to use for the proxy request to the backend.  Because NGINX wants all the proxy_set_headers to be in
@@ -187,7 +188,7 @@ location ~^/server/config/default.d/(?P<config>[a-z0-9\-_\.]+)$ {
   add_header X-Uri "$config" always ;
 
   alias "/etc/nginx/default.d/$config" ;
- 
+
   # only from some BU networks
   allow 128.197.0.0/16 ;
   allow 168.122.0.0/16 ;
@@ -205,7 +206,7 @@ location ~^/server/config/conf.d/(?P<config>[a-z0-9\-_\.]+)$ {
   add_header X-Uri "$config" always ;
 
   alias "/etc/nginx/conf.d/$config" ;
- 
+
   # only from some BU networks
   allow 128.197.0.0/16 ;
   allow 168.122.0.0/16 ;
@@ -222,7 +223,7 @@ location ~^/server/maps/(?P<map>[a-zA-Z0-9_\.]+) {
   add_header Content-Type text/plain always;
   add_header Cache-Control "no-cache, no-store" always ;
   alias "/etc/nginx/maps/$map" ;
- 
+
   # only from some BU networks
   allow 128.197.0.0/16 ;
   allow 168.122.0.0/16 ;
@@ -239,7 +240,7 @@ location ~^/server/hosts.map$ {
   add_header Content-Type text/plain always;
   add_header Cache-Control "no-cache, no-store" always ;
   alias /etc/nginx/hosts.map ;
- 
+
   # only from some BU networks
   allow 128.197.0.0/16 ;
   allow 168.122.0.0/16 ;
@@ -254,7 +255,7 @@ location ~^/server/hosts.map$ {
 
 location ~^/server/status$ {
   stub_status on;
-  
+
   # only from some BU networks
   allow 128.197.0.0/16 ;
   allow 168.122.0.0/16 ;
@@ -272,7 +273,7 @@ location ~^/server/source_ip$ {
   add_header Content-Type text/plain always;
   add_header Cache-Control "no-cache, no-store" always ;
   return 200 "remote_addr: $remote_addr\nreal-ip: $realip_remote_addr\nx-forwarded-for: $http_x_forwarded_for\n" ;
- 
+
   # only from some BU networks
   allow 128.197.0.0/16 ;
   allow 168.122.0.0/16 ;
@@ -308,7 +309,7 @@ location ~^/server/cloudfront_ips$ {
 #
 location ~^/server/lookup/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9_\-]+)) {
 
-  # The first set of variables are determining if there is a 
+  # The first set of variables are determining if there is a
   # match on top or micro - output should be type
   #
   set $backend $host_backend ;
@@ -331,7 +332,7 @@ location ~^/server/lookup/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<seco
 }
 
 location  ~^/+server/lookup/+$ {
-  # The first set of variables are determining if there is a 
+  # The first set of variables are determining if there is a
   # match on top or micro - output should be type
   #
   if ($query_string = '') {
@@ -353,7 +354,7 @@ location  ~^/+server/lookup/+$ {
 }
 
 location  ~^/+server/lookup/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
-  # The first set of variables are determining if there is a 
+  # The first set of variables are determining if there is a
   # match on top or micro - output should be type
   #
   set $backend $host_backend ;
@@ -384,9 +385,10 @@ location = /server/healthcheck {
 # The following two rules are for doing the default action of looking in the map file (sites.map)
 # for the type of backend.  The default is WordPress if that fails.
 #
+# case 3: 2 levels deep
 location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9_\-]+)) {
 
-  # The first set of variables are determining if there is a 
+  # The first set of variables are determining if there is a
   # match on top or micro - output should be type
   #
   set $backend $host_backend ;
@@ -411,7 +413,7 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   }
 
   #
-  # End results of above is a backend variable - next we determine 
+  # End results of above is a backend variable - next we determine
   # what to do
   if ($backend = 'redirect_asis') {
     add_header X-Upstream "redirect_asis" always;
@@ -425,7 +427,7 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   add_header X-Backend $backend always ;
   add_header X-Upstream $backend always ;
 
-  proxy_pass $backend_scheme://$backend_hostname ;
+  proxy_pass $backend_scheme://$backend_hostname$request_uri ;
 
   # ####
   # The following headers have been moved here so we can do a map lookup to determine what host header
@@ -456,9 +458,10 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   resolver <%= ENV['NAMESERVER'] %> ;
 }
 
+# case 2: single level deep
 location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
 
-  # The first set of variables are determining if there is a 
+  # The first set of variables are determining if there is a
   # match on top or micro - output should be type
   #
   set $backend $host_backend ;
@@ -481,7 +484,7 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   add_header X-WPfile "${backend}    ${is_wpfile}" always ;
 
   #
-  # End results of above is a backend variable - next we determine 
+  # End results of above is a backend variable - next we determine
   # what to do
   #
   if ($backend = 'redirect_asis') {
@@ -496,7 +499,7 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   add_header X-Backend $backend always ;
   add_header X-Upstream $backend always ;
 
-  proxy_pass $backend_scheme://$backend_hostname ;
+  proxy_pass $backend_scheme://$backend_hostname$request_uri ;
 
   # ####
   # The following headers have been moved here so we can do a map lookup to determine what host header
@@ -527,4 +530,3 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   resolver <%= ENV['NAMESERVER'] %> ;
 
 }
-
