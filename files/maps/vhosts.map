@@ -1,5 +1,5 @@
-# This map file will contain the vhosts routing entries.  
-# There is actually no difference between this and the sites.map so each entry must be 
+# This map file will contain the vhosts routing entries.
+# There is actually no difference between this and the sites.map so each entry must be
 # unique.
 #
 # This version only has the data necessary for the automatic testing.
@@ -19,8 +19,8 @@ redirecthost redirect ;
 redirectasishost redirect_asis ;
 redirectasishost/tech redirect ;
 
-# custom domains - 
+# custom domains -
 bi.bu.edu/index.html redirect_asis ;
 bi.bu.edu bi_backend ;
 
-
+wiki-test.bu.edu pathcheck ;
