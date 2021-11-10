@@ -12,7 +12,7 @@ docker build -t "$fullimage" .
 #if docker run "$fullimage" /usr/sbin/run-nginx.sh -t ; then
 # Better current test
 docker tag "$fullimage" "validate-router"
-if /usr/local/bin/docker-compose -f validate.yml up --abort-on-container-exit ; then
+if docker-compose -f validate.yml up --abort-on-container-exit ; then
   # if it tests out then push to docker hub
   #docker push "$fullimage"
   echo "built successfully"
