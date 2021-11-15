@@ -2,6 +2,8 @@ version: "2"
 services:
   test-backend:
     build: test/backend/
+  "ist-mstrbi-p":
+    build: test/customdomain_backend/
   sut:
     build: test/sut/
     links:
