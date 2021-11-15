@@ -23,4 +23,4 @@ redirectasishost/tech redirect ;
 bi.bu.edu/index.html redirect_asis ;
 bi.bu.edu bi_backend ;
 
-wiki-test.bu.edu pathcheck ;
+backend-with-path pathcheck ;
