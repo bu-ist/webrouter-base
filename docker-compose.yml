@@ -1,0 +1,43 @@
+version: "2"
+services:
+  test-backend:
+    build: test/backend/
+  "ist-mstrbi-p":
+    build: test/customdomain_backend/
+  sut:
+    build: test/sut/
+    links:
+      - bufe-autotest-test
+    volumes:
+      - ./test/results:/results
+    environment:
+      - TEST_BASE=1
+  bufe-autotest-test:
+    build:
+      context: ./
+      args:
+        landscape: test
+    #build: apache/
+    #build: nginx/
+    #read_only: true
+    ports:
+      - 80
+      - 443
+    #restart: always
+    environment:
+      - LANDSCAPE=test
+      - ALLOW_DOCKER_NETS=true
+      - BACKEND_DBIN=test-backend
+      - BACKEND_DEGREE_ADVICE=test-backend
+      - BACKEND_DJANGO=test-backend
+      - BACKEND_PHPBIN=test-backend
+      - BACKEND_W3_CONTENT=test-backend
+      - BACKEND_WEB_CONTENT=test-backend
+      - BACKEND_WEB_LEGACY=test-backend
+      - BACKEND_WP_APP=test-backend
+      - BACKEND_WP_CONTENT=test-backend
+      - BACKEND_UISCGI_APP=test-backend
+      - BACKEND_UISCGI_CONTENT=test-backend
+    links:
+      - test-backend
+      - "ist-mstrbi-p"

@@ -22,7 +22,7 @@ setup () {
   test_web http "bi.bu.edu" "/"
   assert_status 302
   assert_header location "http://bi.bu.edu/MicroStrategy/servlet/mstrWeb"
-  #assert_backend "wordpress"
+  assert_backend "redirect_asis"
 }
 
 @test "customdomain(proxyother) /MicroStrategy/ - bi.bu.edu type config (proxyother)" {
