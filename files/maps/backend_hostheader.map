@@ -14,3 +14,5 @@ checkhostheader hostheader.bu.edu ;
 
 #checkhostheader $backend_hostname ;
 
+
+static-public static-sites-prod-public.s3-website-us-east-1.amazonaws.com ;

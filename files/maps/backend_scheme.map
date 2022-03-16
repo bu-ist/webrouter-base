@@ -17,3 +17,5 @@ checkhostheader http ;
 
 # bi_backend always uses http
 bi_backend http ;
+
+static-public http ;

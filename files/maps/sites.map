@@ -1826,3 +1826,7 @@ _/25000 content ;
 _/200word content ;
 _/28qatest content ;
 _/3dcampus content ;
+
+www.bumc.bu.edu/gms/review_form static-public ;
+blogs-test.bu.edu wordpress-test ;
+blogs-devl.bu.edu wordpress-devl ;

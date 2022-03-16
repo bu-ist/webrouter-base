@@ -1,6 +1,7 @@
 legacy <%= ENV['BACKEND_WEB_LEGACY'] || "ist-web-legacy-#{ENV['LANDSCAPE']}.bu.edu" %> ;
 
 content <%= ENV['BACKEND_W3_CONTENT'] || "ist-w3-content-#{ENV['LANDSCAPE']}.bu.edu" %> ;
+static-public static-sites-prod-public.s3-website-us-east-1.amazonaws.com ;
 
 wpassets <%= ENV['BACKEND_WP_CONTENT'] || "ist-wp-assets-#{ENV['LANDSCAPE']}.bu.edu" %> ;
 
@@ -31,3 +32,7 @@ s3bucket homepage-devl.s3-website-us-east-1.amazonaws.com ;
 bi_backend ist-mstrbi-p:8082 ;
 
 pathcheck test-backend/cgi-bin/uricheck.pl ;
+
+
+wordpress-test ist-wp-app-test.bu.edu ;
+wordpress-devl ist-wp-app-devl.bu.edu ;
