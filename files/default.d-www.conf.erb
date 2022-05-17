@@ -307,7 +307,7 @@ location ~^/server/cloudfront_ips$ {
 # ####
 # the following test the routing lookup
 #
-location ~^/server/lookup/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9_\-]+)) {
+location ~^/server/lookup/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9_\.\-]+)) {
 
   # The first set of variables are determining if there is a
   # match on top or micro - output should be type
@@ -386,7 +386,7 @@ location = /server/healthcheck {
 # for the type of backend.  The default is WordPress if that fails.
 #
 # case 3: 2 levels deep
-location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9_\-]+)) {
+location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9_\.\-]+)) {
 
   # The first set of variables are determining if there is a
   # match on top or micro - output should be type
