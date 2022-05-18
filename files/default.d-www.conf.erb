@@ -381,6 +381,17 @@ location = /server/healthcheck {
   return 200 "OK\n";
 }
 
+
+# Special handling for S3 redirects for custom domains. We're serving
+# this traffic out of a custom prefix in S3, but whenever a trailing
+# slash is missing S3 will give a redirect into
+# example.bu.edu/_domains/example.bu.edu/foo/ and we just need to
+# redirect back to example.bu.edu/foo/
+location ~^/+_domains/(?P<domain>[a-zA-Z0-9_\.\-]+)(?P<custompath>/.*) {
+  return 303 "https://$domain$custompath" ;
+}
+
+
 # ####
 # The following two rules are for doing the default action of looking in the map file (sites.map)
 # for the type of backend.  The default is WordPress if that fails.
