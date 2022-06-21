@@ -79,7 +79,7 @@ location = / {
   # unpublished posts (without permalinks) go to the root site domain with just a query parameter
   # like www.bu.edu/?page_id=1234&preview=true, so these need to be routed to WordPress.
   #
-  if ($query_string = '') {
+  if ($query_string !~ "preview=true" ) {
     set $toplevel "index.html" ;
   }
 
