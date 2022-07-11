@@ -43,15 +43,6 @@ setup () {
   #dump_web
 }
 
-@test "backendip-http-legacy" {
-  test_web http "$BUWEBHOST" "/server/backend/legacy/htbin/ipcheck/$myip"
-  assert_status 200
-  assert_backend "legacy"
-  assert_content "OK"
-
-  #dump_web
-}
-
 @test "backendip-http-phpbin" {
   test_web http "$BUWEBHOST" "/server/backend/phpbin/htbin/ipcheck/$myip"
   assert_status 200
