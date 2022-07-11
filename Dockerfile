@@ -17,7 +17,6 @@ RUN yum install -y nginx ruby && yum clean all
 
 ADD files/run-nginx.sh /usr/sbin/run-nginx.sh
 ADD files/get-cloudfront-ip.rb /usr/sbin/get-cloudfront-ip.rb
-#ADD files/bu-build-maps.sh /usr/sbin/bu-build-maps.sh
 
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf \
   && chmod 755 /usr/sbin/run-nginx.sh /usr/sbin/get-cloudfront-ip.rb \
@@ -53,8 +52,5 @@ ADD files/hosts.map.erb /etc/erb/nginx/hosts.map.erb
 
 # this copies over the entire maps tree
 ADD files/maps /etc/nginx/maps
-
-# this is not being persistent for some reason - we will punt and generate the maps outside for now
-#RUN /usr/sbin/bu-build-maps.sh && ls -l /etc/nginx/maps
 
 ENV LOG_LEVEL warn
