@@ -5,6 +5,7 @@ www-test.bu.edu _ ;
 www-devl.bu.edu _ ;
 www-syst.bu.edu _ ;
 www.bu.edu _ ;
+localhost _ ;
 
 # all cloudfront hosts map to the default
 .cloudfront.net _ ;
