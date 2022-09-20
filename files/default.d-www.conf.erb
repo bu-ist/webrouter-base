@@ -435,6 +435,11 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
     return 302 "$redirect_url_noslash$request_uri" ;
   }
 
+  set $static_redirect "${backend}:${server_port}";
+  if ( $static_redirect = "static-public:80" ) {
+     return 303 https://$host$request_uri;
+  }
+
   add_header X-Backend $backend always ;
   add_header X-Upstream $backend always ;
 
@@ -505,6 +510,11 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   if ($backend = 'redirect') {
     add_header X-Upstream "redirect" always;
     return 302 "$redirect_url_noslash$request_uri" ;
+  }
+
+  set $static_redirect "${backend}:${server_port}";
+  if ( $static_redirect = "static-public:80" ) {
+     return 303 https://$host$request_uri;
   }
 
   add_header X-Backend $backend always ;
