@@ -416,12 +416,6 @@ location ~^/+(?P<microsite>(?P<toplevel>[a-zA-Z0-9_\.\-]+)(?P<second>/[a-zA-Z0-9
   }
 
   add_header X-Lookup "input: (${toplevel}:${microsite}) backend=${backend}(${top_backend}:${micro_backend})" always ;
-  # Special case of WordPress we need to figure out if wpapp or wpassets
-  #
-  set $is_wpfile "${backend}:$request_uri" ;
-  if ($is_wpfile ~ ^wordpress:/+([a-zA-Z0-9_\-]+/)?files/ ) {
-    set $backend "wpassets" ;
-  }
 
   #
   # End results of above is a backend variable - next we determine
@@ -489,15 +483,6 @@ location  ~^/+(?P<toplevel>[a-zA-Z0-9_\.\-]+) {
   }
 
   add_header X-Lookup "input: (${toplevel}:) backend=${backend}(${top_backend}:)" always ;
-
-  # Special case of WordPress we need to figure out if wpapp or wpassets
-  #
-  set $is_wpfile "${backend}:$request_uri" ;
-  if ($is_wpfile ~ ^wordpress:/+([a-zA-Z0-9_\-]+/)?files/ ) {
-    set $backend "wpassets" ;
-  }
-
-  add_header X-WPfile "${backend}    ${is_wpfile}" always ;
 
   #
   # End results of above is a backend variable - next we determine
