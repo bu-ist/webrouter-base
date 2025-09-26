@@ -37,4 +37,4 @@ jobs:
           context: ./test/backend
           file: ./test/backend/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/backend:latest
+          tags: ghcr.io/${{ github.repository }}/test-backend:latest
